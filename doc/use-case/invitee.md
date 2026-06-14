@@ -8,18 +8,19 @@
 - Mở link → xem thiệp với animation
 - Nếu link cá nhân → hiển thị tên khách trên thiệp
 - Nếu link chung → không hiển thị tên
+- Chia sẻ link thiệp cho người khác
 
 ## 3. RSVP
 - Xác nhận tham dự: Có / Không / Chưa chắc
 - Nhập số người đi cùng (nếu được phép)
 - Nhập yêu cầu đặc biệt (ăn chay, dị ứng...)
+- **Sửa RSVP** sau khi đã submit (đổi ý, thay đổi số người)
 
 ## 4. Gửi Lời Chúc
 - Nhập lời chúc văn bản
-- Upload ảnh hoặc video ngắn (tối đa 50MB, 60 giây)
-- Lời chúc hiển thị trong dashboard của host
 
 ## 5. Xem Thông Tin Sự Kiện
 - Ngày giờ, địa điểm
 - Bản đồ chỉ đường (Google Maps embed)
-- Đếm ngược đến ngày cưới
+- Đếm ngược đến ngày sự kiện
+- **Thêm vào lịch** (Google Calendar / Apple Calendar)
