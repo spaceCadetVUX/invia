@@ -111,8 +111,17 @@
 ## 9. Sau Sự Kiện
 
 - Gửi thiệp cảm ơn (thank you card) cho khách sau sự kiện
-- Download toàn bộ ảnh/video lời chúc
 - Xem lại lời chúc sau khi event kết thúc (trong thời hạn lưu trữ)
+- **Tải backup toàn bộ sự kiện** — 1 file `.zip` gồm 6 file:
+
+| File | Nội dung |
+|---|---|
+| `guests.xlsx` | Danh sách khách + RSVP |
+| `wishes.xlsx` | Lời chúc dạng bảng |
+| `event-summary.pdf` | Tóm tắt sự kiện (layout đẹp) |
+| `wishes-book.pdf` | Sách lời chúc layout đẹp, có tên từng khách |
+| `thiep.pdf` | Thiệp cưới bản in |
+| `thiep.html` | Thiệp cưới responsive — xem trên browser, có animation |
 
 ---
 
