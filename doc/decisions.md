@@ -90,7 +90,28 @@ Ghi lại các quyết định thiết kế quan trọng để tra cứu sau.
 
 ---
 
-## 8. Database — Repository Pattern
+## 9. Đa Ngôn Ngữ — Không Làm MVP, Code i18n-ready
+
+**Quyết định:** MVP chỉ hỗ trợ tiếng Việt. Không implement đa ngôn ngữ cho đến khi có nhu cầu thực tế.
+
+**Lý do:** Target market là VN, 99% thiệp cưới VN dùng tiếng Việt. Effort cao, value thấp ở giai đoạn này.
+
+**Code i18n-ready ngay từ đầu:** Dùng Laravel Lang files, không hardcode string trong code.
+```php
+// Luôn dùng
+__('rsvp.confirm')
+
+// Không hardcode
+'Xác nhận tham dự'
+```
+
+Khi cần thêm English sau chỉ tạo `lang/en/` — không cần refactor code.
+
+**Roadmap:** Xét thêm English ở Phase 3+ nếu có nhu cầu thực tế (Việt Kiều, khách quốc tế).
+
+---
+
+## 10. Database — Repository Pattern
 
 **Quyết định:** Dùng Repository Pattern từ đầu để trừu tượng hóa data layer.
 
