@@ -72,6 +72,7 @@
 
 - **Import từ Excel/CSV** — template có sẵn để điền
 - **Nhập tay từng người** — cho khách phát sinh
+- **Gửi link form đăng ký** — host gửi link, khách tự điền tên vào danh sách (auto-accept, giới hạn theo gói)
 - Thông tin khách: Họ tên (bắt buộc), Email, SĐT, Số bàn (tùy chọn)
 - Sửa / Xóa khách trong danh sách
 
