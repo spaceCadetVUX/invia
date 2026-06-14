@@ -146,7 +146,17 @@ Host thu hồi quyền bất cứ lúc nào. Lưu trong `event_collaborators.per
 
 ---
 
-## 13. Database — Repository Pattern
+## 13. Database Engine — PostgreSQL
+
+**Quyết định:** Dùng PostgreSQL thay vì MySQL.
+
+**Lý do:** `events.settings` và `notifications.data` là JSONB — PostgreSQL query/index trực tiếp vào JSON key nhanh hơn MySQL JSON type. Long-term tốt hơn khi scale.
+
+**Laravel config:** `DB_CONNECTION=pgsql` — Eloquent hỗ trợ đầy đủ, không cần thay đổi code.
+
+---
+
+## 14. Database — Repository Pattern
 
 **Quyết định:** Dùng Repository Pattern từ đầu để trừu tượng hóa data layer.
 

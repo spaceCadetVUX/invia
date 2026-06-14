@@ -12,7 +12,7 @@
 | Trang thiệp public | Blade + GSAP | Bắt buộc — crawler đọc OG tags |
 | Styling | Tailwind CSS | Dashboard only |
 | Animation | GSAP | Thiệp public |
-| Database | MySQL | Repository Pattern từ đầu |
+| Database | PostgreSQL | JSONB cho events.settings, notifications.data |
 | Queue | Database driver → Redis khi scale | |
 | Storage | VPS local → Cloudflare R2 | Laravel Filesystem Abstraction |
 | Email | Resend.com | |
@@ -452,7 +452,7 @@ AWS_ENDPOINT=https://<account>.r2.cloudflarestorage.com
 |---|---|---|
 | MVP | VPS local | $0 |
 | ~1,000 event | Cloudflare R2 | ~$0.015/GB/tháng |
-| Scale lớn | R2 + Managed MySQL | Tùy quy mô |
+| Scale lớn | R2 + Managed PostgreSQL | Tùy quy mô |
 
 ### Auto-delete Policy
 
