@@ -111,7 +111,42 @@ Khi cần thêm English sau chỉ tạo `lang/en/` — không cần refactor cod
 
 ---
 
-## 10. Database — Repository Pattern
+## 10. Notification — In-app + Email
+
+**Quyết định:** Cả 2 — in-app (chuông dashboard) và email.
+
+**In-app:** Bảng `notifications` trong DB, dashboard poll mỗi 30s hoặc dùng Laravel Echo khi scale. Badge đỏ trên chuông, đánh dấu đã đọc.
+
+**Email:** Gửi qua Resend.com đồng thời khi tạo notification.
+
+**Trigger:** Khách RSVP, khách gửi lời chúc, thông báo hệ thống từ admin.
+
+---
+
+## 11. Shared Dashboard — Full Access + Read-only
+
+**Quyết định:** Hỗ trợ cả 2 cấp quyền từ đầu.
+
+| Permission | Có thể làm |
+|---|---|
+| `readonly` | Xem khách, RSVP, lời chúc |
+| `full` | Xem + thêm/sửa/xóa khách, quản lý RSVP, ẩn lời chúc |
+
+Host thu hồi quyền bất cứ lúc nào. Lưu trong `event_collaborators.permission`.
+
+---
+
+## 12. Blog — Tự Build
+
+**Quyết định:** Tự build blog trong Laravel để kiểm soát SEO hoàn toàn.
+
+**Lý do:** Dùng tool ngoài (Notion, WordPress headless) mất kiểm soát URL structure, meta tags, sitemap. Tự build = Blade render server-side → Google index đầy đủ.
+
+**Schema:** `blog_posts` (title, slug, content HTML, excerpt, og_image, published_at). Admin viết bài qua dashboard.
+
+---
+
+## 13. Database — Repository Pattern
 
 **Quyết định:** Dùng Repository Pattern từ đầu để trừu tượng hóa data layer.
 

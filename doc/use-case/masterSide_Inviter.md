@@ -12,8 +12,10 @@
 - Xóa tài khoản
 
 ### 1.3 Notification
-- Nhận thông báo (email hoặc in-app) khi khách RSVP
+- Nhận thông báo **in-app** (chuông trong dashboard) khi khách RSVP
+- Nhận thông báo **email** khi khách RSVP
 - Nhận thông báo khi khách gửi lời chúc
+- Đánh dấu đã đọc / xóa thông báo
 
 ---
 
@@ -44,7 +46,11 @@
 - Một host có thể tạo và quản lý nhiều event cùng lúc
 
 ### 3.6 Chia sẻ quyền quản lý
-- Mời wedding planner / MC cùng xem và quản lý dashboard event (read-only hoặc full access)
+- Mời wedding planner / MC qua email
+- 2 cấp quyền:
+  - **Read-only:** chỉ xem danh sách khách, RSVP, lời chúc
+  - **Full access:** xem + thêm/sửa/xóa khách, quản lý RSVP, ẩn lời chúc
+- Thu hồi quyền bất cứ lúc nào
 
 ---
 
@@ -95,7 +101,7 @@
 - Tạo QR code cho thiệp
 - Gửi lại cho khách chưa RSVP
 - Gửi reminder thủ công (ngoài auto 3 ngày trước)
-- Thêm link livestream cho đám cưới hybrid/online
+- Thêm link livestream cho đám cưới hybrid/online (lưu vào `events.livestream_url`)
 
 ---
 
@@ -110,8 +116,7 @@
 
 ## 8. Quản Lý Lời Chúc
 
-- Xem tất cả lời chúc văn bản, ảnh, video từ khách
-- Xem gallery ảnh/video dạng lưới
+- Xem tất cả lời chúc văn bản từ khách
 - Pin lời chúc nổi bật
 - Ẩn lời chúc không phù hợp
 

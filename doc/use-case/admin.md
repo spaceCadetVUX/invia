@@ -40,15 +40,25 @@
 
 ---
 
-## 5. Quản Lý Nội Dung
+## 5. Quản Lý Nhạc Library
+
+- Upload bài nhạc royalty-free vào thư viện
+- Nhập thông tin: tên bài, tác giả, mood (romantic / classical / acoustic / traditional)
+- Bật / tắt bài nhạc
+- Xóa bài nhạc
+
+---
+
+## 6. Quản Lý Nội Dung
 
 - Xem / ẩn lời chúc vi phạm được báo cáo
 - Quản lý nội dung email template (nội dung email gửi cho khách)
 - Đăng thông báo hệ thống (banner bảo trì, tính năng mới cho host)
+- Quản lý blog posts (tạo, sửa, xóa, publish)
 
 ---
 
-## 6. Thống Kê & Báo Cáo
+## 7. Thống Kê & Báo Cáo
 
 - Tổng quan hệ thống: số user, số event, doanh thu
 - Thống kê theo thời gian (ngày / tuần / tháng)
@@ -57,7 +67,7 @@
 
 ---
 
-## 7. Hệ Thống
+## 8. Hệ Thống
 
 - Xem log lỗi
 - Chạy cleanup event hết hạn thủ công

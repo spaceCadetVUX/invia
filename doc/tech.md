@@ -105,6 +105,7 @@ events (
   settings,            -- JSON: vị trí/font/màu text slots, ảnh, video
   music_type,          -- 'library' | 'soundcloud' | 'upload'
   music_source,        -- URL SoundCloud hoặc path file MP3
+  livestream_url,      -- link livestream cho đám cưới hybrid
   og_image_path,
   expires_at, created_at
 )
@@ -175,14 +176,55 @@ coupons (
   expires_at, is_active,
   created_at
 )
+
+-- Chia sẻ quyền quản lý event
+event_collaborators (
+  id, event_id,
+  email,               -- email người được mời
+  token,               -- unique token cho link truy cập
+  permission,          -- 'readonly' | 'full'
+  created_at
+)
+
+-- In-app notifications
+notifications (
+  id, user_id,
+  type,                -- 'rsvp' | 'wish' | 'system'
+  title, body,
+  data,                -- JSON: event_id, guest_id...
+  read_at,
+  created_at
+)
+
+-- Blog
+blog_posts (
+  id, title, slug,
+  content,             -- HTML
+  excerpt,
+  og_image_path,
+  published_at,
+  created_at
+)
+
+-- Thông báo hệ thống (banner)
+system_announcements (
+  id, title, content,
+  type,                -- 'info' | 'warning' | 'maintenance'
+  starts_at, ends_at,
+  is_active,
+  created_at
+)
 ```
 
 **Lưu ý schema:**
 - `events.slug` — unique, auto-generate từ tên + random suffix
+- `events.livestream_url` — link livestream cho đám cưới hybrid
 - `guests.token` — unique token 32 ký tự, dùng cho link cá nhân
 - `events.expires_at` — ngày hết hạn data (phục vụ auto-delete)
 - `events.settings` — JSON lưu toàn bộ tùy chỉnh thiệp (vị trí, font, màu, ảnh, video)
 - `events.music_type` — phân biệt 3 nguồn nhạc
+- `event_collaborators.permission` — 'readonly' hoặc 'full'
+- `notifications.read_at` — null = chưa đọc
 
 ---
 
