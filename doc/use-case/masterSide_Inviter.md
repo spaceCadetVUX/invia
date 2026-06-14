@@ -60,7 +60,13 @@
 - Áp dụng template đã mua vào event
 
 ### 4.3 Tùy chỉnh template
-- Tùy chỉnh: font, màu sắc, nội dung, ảnh nền
+- Kéo thả vị trí text elements trên thiệp
+- Chỉnh font, màu sắc, kích thước text
+- Ảnh trang trí (hoa, khung, nền) fix cứng theo template — không đổi được
+- Upload ảnh cưới vào slot ảnh trên thiệp
+- Nhập link YouTube/Drive cho video trên thiệp
+- Nhạc nền: upload file MP3 (tối đa 5MB) hoặc nhập link YouTube/SoundCloud
+- Nút bật/tắt nhạc nổi góc màn hình (do browser block autoplay)
 - Đổi template sau khi đã tạo event
 
 ### 4.4 Preview thiệp
