@@ -226,31 +226,86 @@ Dùng Google Fonts API trực tiếp trong Blade template:
 
 **Roadmap:** MVP dùng Blade file → chuyển JSON Schema khi mở editor cho user.
 
+### Cấu Trúc File Template — Đầy Đủ
+
+```
+public/templates/{name}/
+├── style.css        ← CSS scoped .tmpl-{name}
+├── script.js        ← IIFE + GSAP
+├── config.json      ← định nghĩa các slot editable
+└── assets/          ← ảnh trang trí fix cứng (hoa, khung, nền)
+    ├── bg.jpg
+    └── flower.png
+
+resources/views/thiep/templates/{name}/
+└── index.blade.php
+```
+
+**`config.json` — định nghĩa slot editable cho Vue drag editor:**
+
+```json
+{
+  "slots": {
+    "bride_name": { "type": "text",  "default_x": 50, "default_y": 30 },
+    "groom_name": { "type": "text",  "default_x": 50, "default_y": 40 },
+    "date":       { "type": "text",  "default_x": 50, "default_y": 55 },
+    "photo":      { "type": "image", "default_x": 50, "default_y": 20 },
+    "video":      { "type": "video", "default_x": 50, "default_y": 70 }
+  }
+}
+```
+
+Vue editor đọc `config.json` → render đúng panel tùy chỉnh cho từng template. Settings của host lưu vào `events.settings` (JSON).
+
 ---
 
-## Storage — Ảnh/Video Lời Chúc
+## Storage — Kiến Trúc Phân Tầng
 
-**VPS local storage** — đủ dùng vì data không lưu vĩnh viễn.
+### Laravel Filesystem Abstraction
+
+Dùng `Storage::disk()` từ đầu — không hardcode path. Khi scale chỉ đổi `.env`, không sửa code:
+
+```php
+// Luôn dùng Storage facade, không dùng file_get_contents / move_uploaded_file trực tiếp
+Storage::disk('local')->put($path, $content)   // MVP
+Storage::disk('r2')->put($path, $content)       // Scale — chỉ đổi config
+```
 
 ```env
+# MVP
 FILESYSTEM_DISK=local
+
+# Scale
+FILESYSTEM_DISK=r2
+AWS_ENDPOINT=https://<account>.r2.cloudflarestorage.com
 ```
 
-```bash
-php artisan storage:link
+### Roadmap Storage
+
+| Giai đoạn | Storage | Chi phí |
+|---|---|---|
+| MVP | VPS local | $0 |
+| ~1,000 event | Cloudflare R2 | ~$0.015/GB/tháng |
+| Scale lớn | R2 + Managed MySQL | Tùy quy mô |
+
+### Auto-delete Policy
+
+| Loại data | Thời hạn |
+|---|---|
+| Lời chúc text | 6 tháng sau ngày sự kiện |
+| Thiệp, RSVP, danh sách khách | 1 năm sau ngày sự kiện |
+| Gói Premium | Lưu trữ vĩnh viễn |
+
+```php
+Schedule::command('events:cleanup')->monthly();
 ```
 
-### Giới hạn upload
-```
-Ảnh: tối đa 5MB
-Video: tối đa 50MB, 60 giây
-```
+### Giới hạn Upload
 
-### Auto-delete policy
-| Loại data | Giữ bao lâu sau ngày cưới |
-|-----------|--------------------------|
-| Ảnh/video lời chúc | 6 tháng |
-| Thiệp, RSVP, danh sách khách | 1 năm |
+```
+Ảnh cưới host:   tối đa 5MB
+Nhạc nền MP3:    tối đa 5MB
+```
 
 ```php
 // Chạy hàng tháng

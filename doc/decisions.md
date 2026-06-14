@@ -55,7 +55,7 @@ Ghi lại các quyết định thiết kế quan trọng để tra cứu sau.
 
 ---
 
-## 4. Google OAuth — Primary Auth cho Inviter
+## 5. Google OAuth — Primary Auth cho Inviter
 
 **Quyết định:** Google OAuth là phương thức đăng ký/đăng nhập chính cho host.
 
@@ -65,10 +65,37 @@ Ghi lại các quyết định thiết kế quan trọng để tra cứu sau.
 
 ---
 
-## 5. Template Deploy — File-based qua Git
+## 6. Template Deploy — File-based qua Git + config.json
 
-**Quyết định:** Template là Blade + CSS/JS static files, deploy qua git — không upload qua admin UI.
+**Quyết định:** Template là Blade + CSS/JS + config.json + assets/, deploy qua git — không upload qua admin UI.
 
 **Lý do:** An toàn hơn, version control rõ ràng, không có rủi ro XSS từ HTML string trong DB.
 
 **Admin UI** chỉ quản lý record trong DB (tên, blade_file reference, thumbnail, giá, version).
+
+**config.json** định nghĩa các slot editable (text, image, video) — Vue drag editor đọc file này để render đúng panel tùy chỉnh.
+
+---
+
+## 7. Storage — Laravel Filesystem Abstraction từ Đầu
+
+**Quyết định:** Dùng `Storage::disk()` từ MVP, không hardcode path trực tiếp.
+
+**Lý do:** Khi scale lên Cloudflare R2 hoặc S3 chỉ cần đổi `.env`, không sửa code business logic.
+
+**Roadmap:**
+- MVP → VPS local (`FILESYSTEM_DISK=local`)
+- ~1,000 event → Cloudflare R2 (~$0.015/GB/tháng)
+- Scale lớn → R2 + Managed MySQL
+
+---
+
+## 8. Database — Repository Pattern
+
+**Quyết định:** Dùng Repository Pattern từ đầu để trừu tượng hóa data layer.
+
+```
+Controller → Service → Repository → DB
+```
+
+**Lý do:** Sau này swap MySQL sang managed DB hoặc đổi driver không cần sửa business logic. Dễ test hơn.
