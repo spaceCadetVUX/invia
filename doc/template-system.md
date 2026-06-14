@@ -2,7 +2,7 @@
 
 ---
 
-## Cấu Trúc File — Đã Fix
+## Cấu Trúc File
 
 Blade và CSS/JS **phải tách thư mục** — `resources/views/` không được Nginx serve, browser không load được file CSS/JS trong đó.
 
@@ -23,21 +23,66 @@ resources/
                 └── index.blade.php
 
 public/
-└── templates/                         ← CSS/JS ở đây — Nginx serve trực tiếp
+└── templates/                         ← Static files — Nginx serve trực tiếp
     ├── classic/
-    │   ├── style.css
-    │   └── script.js
+    │   ├── style.css                  ← CSS scoped .tmpl-classic
+    │   ├── script.js                  ← IIFE + GSAP
+    │   ├── config.json                ← Slot definitions cho Vue drag editor
+    │   └── assets/                    ← Ảnh trang trí fix cứng (hoa, khung, nền)
+    │       ├── bg.jpg
+    │       └── flower.png
     ├── modern/
     │   ├── style.css
-    │   └── script.js
+    │   ├── script.js
+    │   ├── config.json
+    │   └── assets/
     └── rustic/
         ├── style.css
-        └── script.js
+        ├── script.js
+        ├── config.json
+        └── assets/
 ```
 
 **Lý do tách:**
 - `resources/views/` → chỉ PHP/Blade, không web-accessible
 - `public/templates/` → Nginx serve trực tiếp, browser load được
+
+---
+
+## config.json — Slot Definitions
+
+Mỗi template có 1 file `config.json` định nghĩa các element mà host có thể tùy chỉnh. Vue drag editor đọc file này để render đúng panel.
+
+```json
+{
+  "slots": {
+    "bride_name": { "type": "text",  "default_x": 50, "default_y": 30 },
+    "groom_name": { "type": "text",  "default_x": 50, "default_y": 40 },
+    "date":       { "type": "text",  "default_x": 50, "default_y": 55 },
+    "photo":      { "type": "image", "default_x": 50, "default_y": 20 },
+    "video":      { "type": "video", "default_x": 50, "default_y": 70 }
+  }
+}
+```
+
+**Loại slot:**
+| Type | Mô tả |
+|---|---|
+| `text` | Host kéo thả, chỉnh font/màu/size |
+| `image` | Host upload ảnh cưới |
+| `video` | Host nhập link YouTube/Drive |
+
+**Settings của host** lưu vào `events.settings` (JSON) sau khi edit:
+
+```json
+{
+  "bride_name": { "x": 48, "y": 32, "font": "Playfair Display", "size": 48, "color": "#fff" },
+  "groom_name": { "x": 52, "y": 42, "font": "Playfair Display", "size": 48, "color": "#fff" },
+  "date":       { "x": 50, "y": 56, "font": "Cormorant Garamond", "size": 24, "color": "#eee" }
+}
+```
+
+**Position dùng `%`** — không dùng `px` để responsive trên mọi màn hình.
 
 ---
 
