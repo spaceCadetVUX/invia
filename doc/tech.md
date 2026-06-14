@@ -49,6 +49,33 @@ php artisan breeze:install
 
 Chọn stack **Inertia + Vue** khi cài Breeze.
 
+### Phương thức đăng ký / đăng nhập
+
+**Inviter (Host):**
+- **Google OAuth** — primary, nút to (giảm drop-off, user lười điền form)
+- **Email / Password** — secondary, vẫn giữ cho người không dùng Google
+
+**Invitee (Khách):** Không có tài khoản — truy cập qua token trong link thiệp.
+
+```bash
+# Google OAuth
+composer require laravel/socialite
+```
+
+- Tạo OAuth credentials miễn phí tại Google Cloud Console
+- Lấy: email, họ tên, avatar URL, Google ID
+- Email gửi thiệp vẫn qua Resend.com — không phụ thuộc Gmail API
+
+```
+Đăng ký / Đăng nhập
+─────────────────────
+[  Tiếp tục với Google  ]   ← primary
+
+──────── hoặc ────────
+
+Email / Mật khẩu            ← secondary
+```
+
 ### Roles (dùng spatie/laravel-permission)
 | Role | Quyền |
 |------|-------|
