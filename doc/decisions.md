@@ -29,7 +29,21 @@ Ghi lại các quyết định thiết kế quan trọng để tra cứu sau.
 
 ---
 
-## 3. Upload Media — Bỏ Khỏi MVP
+## 3. Nhạc Nền Thiệp — Hybrid + Safe Harbor
+
+**Quyết định:** 2 lựa chọn cho host:
+1. Chọn từ thư viện nhạc royalty-free do admin curate sẵn (~30–50 bài)
+2. Tự upload MP3 (tối đa 5MB) — host tự chịu trách nhiệm bản quyền
+
+**Safe Harbor:** Host bắt buộc tick checkbox xác nhận quyền sử dụng trước khi upload. Invia.vn ghi rõ trong ToS không chịu trách nhiệm về nhạc do user upload. Có quy trình gỡ khi nhận khiếu nại bản quyền.
+
+**Lý do không dùng Spotify/YouTube:** Spotify yêu cầu listener có tài khoản, YouTube ToS cấm audio-only và hiển thị quảng cáo — cả 2 đều không phù hợp làm nhạc nền thiệp.
+
+**Nguồn nhạc royalty-free cho thư viện:** Pixabay Music, YouTube Audio Library, Free Music Archive — miễn phí, đủ dùng cho MVP. Scale lên mới thuê nhạc sĩ VN sáng tác riêng.
+
+---
+
+## 4. Upload Media — Bỏ Khỏi MVP
 
 **Quyết định:** Invitee không được upload ảnh/video kèm lời chúc ở MVP.
 

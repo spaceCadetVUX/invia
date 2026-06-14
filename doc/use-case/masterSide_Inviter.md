@@ -65,7 +65,9 @@
 - Ảnh trang trí (hoa, khung, nền) fix cứng theo template — không đổi được
 - Upload ảnh cưới vào slot ảnh trên thiệp
 - Nhập link YouTube/Drive cho video trên thiệp
-- Nhạc nền: upload file MP3 (tối đa 5MB) hoặc nhập link YouTube/SoundCloud
+- Nhạc nền — 2 lựa chọn:
+  - Chọn từ thư viện nhạc royalty-free do admin cung cấp sẵn
+  - Tự upload file MP3 (tối đa 5MB) — host tự chịu trách nhiệm bản quyền, xác nhận qua checkbox trước khi upload
 - Nút bật/tắt nhạc nổi góc màn hình (do browser block autoplay)
 - Đổi template sau khi đã tạo event
 
