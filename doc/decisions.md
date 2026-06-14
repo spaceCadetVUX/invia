@@ -39,6 +39,8 @@ Ghi lại các quyết định thiết kế quan trọng để tra cứu sau.
 
 **Lý do không dùng Spotify/YouTube:** Spotify yêu cầu listener có tài khoản, YouTube ToS cấm audio-only và hiển thị quảng cáo — cả 2 đều không phù hợp làm nhạc nền thiệp.
 
+**SoundCloud embed:** Invia.vn không chịu bản quyền khi embed — SoundCloud tự xử lý với rights holder. Rủi ro duy nhất là track bị gỡ → thiệp mất nhạc. Hiển thị cảnh báo cho host khi nhập link SoundCloud.
+
 **Nguồn nhạc royalty-free cho thư viện:** Pixabay Music, YouTube Audio Library, Free Music Archive — miễn phí, đủ dùng cho MVP. Scale lên mới thuê nhạc sĩ VN sáng tác riêng.
 
 ---

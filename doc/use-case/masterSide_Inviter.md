@@ -65,8 +65,9 @@
 - Ảnh trang trí (hoa, khung, nền) fix cứng theo template — không đổi được
 - Upload ảnh cưới vào slot ảnh trên thiệp
 - Nhập link YouTube/Drive cho video trên thiệp
-- Nhạc nền — 2 lựa chọn:
-  - Chọn từ thư viện nhạc royalty-free do admin cung cấp sẵn
+- Nhạc nền — 3 lựa chọn:
+  - Chọn từ thư viện nhạc royalty-free do admin cung cấp sẵn (ổn định nhất)
+  - Nhập link SoundCloud — linh hoạt, Invia không chịu bản quyền, cảnh báo track có thể bị gỡ bất cứ lúc nào
   - Tự upload file MP3 (tối đa 5MB) — host tự chịu trách nhiệm bản quyền, xác nhận qua checkbox trước khi upload
 - Nút bật/tắt nhạc nổi góc màn hình (do browser block autoplay)
 - Đổi template sau khi đã tạo event
