@@ -31,9 +31,10 @@ Ghi lại các quyết định thiết kế quan trọng để tra cứu sau.
 
 ## 3. Nhạc Nền Thiệp — Hybrid + Safe Harbor
 
-**Quyết định:** 2 lựa chọn cho host:
+**Quyết định:** 3 lựa chọn cho host:
 1. Chọn từ thư viện nhạc royalty-free do admin curate sẵn (~30–50 bài)
-2. Tự upload MP3 (tối đa 5MB) — host tự chịu trách nhiệm bản quyền
+2. Nhập link SoundCloud — linh hoạt, Invia không chịu bản quyền
+3. Tự upload MP3 (tối đa 5MB) — host tự chịu trách nhiệm bản quyền
 
 **Safe Harbor:** Host bắt buộc tick checkbox xác nhận quyền sử dụng trước khi upload. Invia.vn ghi rõ trong ToS không chịu trách nhiệm về nhạc do user upload. Có quy trình gỡ khi nhận khiếu nại bản quyền.
 
@@ -86,7 +87,15 @@ Ghi lại các quyết định thiết kế quan trọng để tra cứu sau.
 **Roadmap:**
 - MVP → VPS local (`FILESYSTEM_DISK=local`)
 - ~1,000 event → Cloudflare R2 (~$0.015/GB/tháng)
-- Scale lớn → R2 + Managed MySQL
+- Scale lớn → R2 + Managed PostgreSQL
+
+---
+
+## 8. Queue — Database Driver → Redis khi Scale
+
+**Quyết định:** MVP dùng database queue driver (PostgreSQL), upgrade Redis khi > 1,000 event active đồng thời.
+
+**Lý do:** Database queue không cần setup thêm, đủ dùng cho MVP. Repository Pattern đảm bảo swap driver dễ dàng.
 
 ---
 
@@ -164,4 +173,4 @@ Host thu hồi quyền bất cứ lúc nào. Lưu trong `event_collaborators.per
 Controller → Service → Repository → DB
 ```
 
-**Lý do:** Sau này swap MySQL sang managed DB hoặc đổi driver không cần sửa business logic. Dễ test hơn.
+**Lý do:** Sau này swap PostgreSQL sang managed DB hoặc đổi driver không cần sửa business logic. Dễ test hơn.

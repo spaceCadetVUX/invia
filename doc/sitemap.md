@@ -106,7 +106,9 @@ Tổng ~55 trang/endpoint. Blade = server-side render (SEO). Inertia = SPA (khô
 | Thư viện nhạc | `/admin/music` | Upload nhạc royalty-free |
 | Quản lý thanh toán | `/admin/payments` | |
 | Coupon | `/admin/coupons` | |
-| Blog | `/admin/blog` | |
+| Blog list | `/admin/blog` | |
+| Tạo bài viết | `/admin/blog/create` | |
+| Sửa bài viết | `/admin/blog/{id}/edit` | |
 | Thống kê hệ thống | `/admin/analytics` | |
 | System logs | `/admin/logs` | |
 

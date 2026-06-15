@@ -93,6 +93,7 @@ Email / Mật khẩu            ← secondary
 -- Người dùng (host)
 users (
   id, name, email, password,
+  email_verified_at,   -- Breeze email verification
   google_id,           -- Google OAuth
   avatar_url,
   role, created_at
@@ -126,7 +127,7 @@ guests (
   id, event_id, name, email, phone,
   table_no, token,
   source,              -- 'manual' | 'import' | 'self_register'
-  created_at
+  created_at, updated_at
 )
 
 -- RSVP
@@ -162,7 +163,8 @@ user_templates (
 
 -- Thanh toán
 payments (
-  id, user_id, event_id,
+  id, user_id,
+  event_id,            -- nullable: null khi mua template premium riêng lẻ
   plan,                -- 'basic' | 'pro' | 'premium' | 'extra' | 'template'
   amount, gateway, gateway_ref,
   status, paid_at
@@ -198,7 +200,9 @@ notifications (
 
 -- Blog
 blog_posts (
-  id, title, slug,
+  id,
+  author_id,           -- FK users.id (admin)
+  title, slug,
   content,             -- HTML
   excerpt,
   og_image_path,
