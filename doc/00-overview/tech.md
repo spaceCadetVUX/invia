@@ -101,7 +101,7 @@ users (
 
 -- Sự kiện
 events (
-  id, user_id, template_id, type, slug, title,
+  id, user_id, template_id, event_type, slug, title,
   date, venue, venue_map_url,
   settings,            -- JSON: vị trí/font/màu text slots, ảnh, video
   music_type,          -- 'library' | 'soundcloud' | 'upload'
