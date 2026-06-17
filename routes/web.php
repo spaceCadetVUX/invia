@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\GoogleController;
+use App\Http\Controllers\Dashboard\EventController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ThiepController;
 use Illuminate\Foundation\Application;
@@ -34,6 +35,15 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware(['auth', 'verified', 'role:host|admin'])
+    ->prefix('dashboard')
+    ->name('dashboard.')
+    ->group(function () {
+        Route::get('/events/create',      [EventController::class, 'create'])->name('events.create');
+        Route::post('/events',            [EventController::class, 'store'])->name('events.store');
+        Route::get('/events/{slug}',      [EventController::class, 'show'])->name('events.show');
+    });
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

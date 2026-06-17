@@ -7,18 +7,21 @@ use Illuminate\Database\Eloquent\Model;
 class Event extends Model
 {
     protected $fillable = [
-        'user_id', 'template_id', 'event_type', 'slug', 'title',
-        'date', 'venue', 'venue_map_url', 'settings',
-        'music_type', 'music_source', 'livestream_url',
-        'og_image_path', 'plan', 'guest_quota', 'expires_at',
+        'user_id', 'template_id', 'title', 'slug', 'event_type', 'status',
+        'event_date', 'event_time', 'venue_name', 'venue_address', 'language',
+        'settings', 'og_image_path', 'view_count',
+        'rsvp_enabled', 'wishes_enabled', 'expires_at', 'published_at',
     ];
 
     protected function casts(): array
     {
         return [
-            'settings'   => 'array',
-            'date'       => 'datetime',
-            'expires_at' => 'datetime',
+            'settings'      => 'array',
+            'event_date'    => 'date',
+            'expires_at'    => 'datetime',
+            'published_at'  => 'datetime',
+            'rsvp_enabled'  => 'boolean',
+            'wishes_enabled'=> 'boolean',
         ];
     }
 

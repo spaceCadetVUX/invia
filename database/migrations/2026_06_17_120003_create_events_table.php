@@ -12,23 +12,24 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('template_id')->nullable()->constrained()->nullOnDelete();
-            $table->string('event_type')->default('wedding');
-            $table->string('slug')->unique();
-            $table->string('title');
-            $table->timestamp('date')->nullable();
-            $table->string('venue')->nullable();
-            $table->string('venue_map_url')->nullable();
-            $table->jsonb('settings')->nullable();
-            $table->string('music_type')->default('library');
-            $table->string('music_source')->nullable();
-            $table->string('livestream_url')->nullable();
-            $table->string('og_image_path')->nullable();
-            $table->string('plan')->default('free');
-            $table->unsignedInteger('guest_quota')->default(50);
+            $table->string('title', 120);
+            $table->string('slug', 200)->unique();
+            $table->string('event_type', 30)->default('wedding');
+            $table->string('status', 20)->default('draft');
+            $table->date('event_date');
+            $table->time('event_time')->nullable();
+            $table->string('venue_name', 150)->nullable();
+            $table->string('venue_address', 300)->nullable();
+            $table->string('language', 10)->default('vi');
+            $table->jsonb('settings')->default('{}');
+            $table->string('og_image_path', 300)->nullable();
+            $table->unsignedInteger('view_count')->default(0);
+            $table->boolean('rsvp_enabled')->default(true);
+            $table->boolean('wishes_enabled')->default(true);
             $table->timestamp('expires_at')->nullable();
+            $table->timestamp('published_at')->nullable();
             $table->timestamps();
 
-            $table->index('slug');
             $table->index('user_id');
         });
     }
