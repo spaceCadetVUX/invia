@@ -5,6 +5,7 @@ use App\Http\Controllers\Dashboard\EventController;
 use App\Http\Controllers\Dashboard\EventTemplateController;
 use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RsvpController;
 use App\Http\Controllers\TemplatePreviewController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -13,8 +14,9 @@ use Inertia\Inertia;
 // ─── Public: trang thiệp (Blade, server-side render) ─────────────────────────
 Route::get('/thiep/{slug}',              [InvitationController::class, 'show'])->name('invitation.show');
 Route::get('/thiep/{slug}/calendar.ics', [InvitationController::class, 'calendar'])->name('invitation.calendar');
-// Stub — implemented in F1.4
-Route::get('/thiep/{slug}/rsvp', fn($slug) => abort(404))->name('invitation.rsvp.form');
+Route::get( '/thiep/{slug}/rsvp',         [RsvpController::class, 'form'])->name('invitation.rsvp.form');
+Route::post('/thiep/{slug}/rsvp',         [RsvpController::class, 'store'])->middleware('throttle:rsvp')->name('invitation.rsvp.store');
+Route::get( '/thiep/{slug}/rsvp/success', [RsvpController::class, 'success'])->name('invitation.rsvp.success');
 
 // ─── Template preview (public, sample data) ───────────────────────────────────
 Route::get('/template-preview/{template}', [TemplatePreviewController::class, 'show'])->name('template.preview');
