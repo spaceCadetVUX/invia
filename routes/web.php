@@ -4,7 +4,9 @@ use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\Dashboard\EventController;
 use App\Http\Controllers\Dashboard\EventTemplateController;
 use App\Http\Controllers\Dashboard\DashboardWishController;
+use App\Http\Controllers\Dashboard\SendInvitationController;
 use App\Http\Controllers\InvitationController;
+use App\Http\Controllers\UnsubscribeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RsvpController;
 use App\Http\Controllers\TemplatePreviewController;
@@ -21,6 +23,7 @@ Route::post('/thiep/{slug}/rsvp',         [RsvpController::class, 'store'])->mid
 Route::get( '/thiep/{slug}/rsvp/success', [RsvpController::class, 'success'])->name('invitation.rsvp.success');
 Route::get( '/thiep/{slug}/wishes',       [WishController::class, 'index'])->name('invitation.wishes.index');
 Route::post('/thiep/{slug}/wishes',       [WishController::class, 'store'])->middleware('throttle:wishes')->name('invitation.wishes.store');
+Route::get( '/unsubscribe/{token}',       [UnsubscribeController::class, 'handle'])->name('unsubscribe');
 
 // ─── Template preview (public, sample data) ───────────────────────────────────
 Route::get('/template-preview/{template}', [TemplatePreviewController::class, 'show'])->name('template.preview');
@@ -59,6 +62,10 @@ Route::middleware(['auth', 'verified', 'role:host|admin'])
         Route::get('/events/{slug}',                   [EventController::class, 'show'])->name('events.show');
         Route::get('/events/{event:slug}/template',    [EventTemplateController::class, 'edit'])->name('events.template.edit');
         Route::patch('/events/{event:slug}/template',  [EventTemplateController::class, 'update'])->name('events.template.update');
+
+        Route::get( '/events/{event:slug}/send',          [SendInvitationController::class, 'index'])->name('events.send.index');
+        Route::post('/events/{event:slug}/send',          [SendInvitationController::class, 'send'])->name('events.send.store');
+        Route::get( '/events/{event:slug}/send/progress',[SendInvitationController::class, 'progress'])->name('events.send.progress');
 
         Route::get(   '/events/{event:slug}/wishes',              [DashboardWishController::class, 'index'])->name('events.wishes.index');
         Route::patch( '/events/{event:slug}/wishes/{wish}/pin',   [DashboardWishController::class, 'pin'])->name('events.wishes.pin');
