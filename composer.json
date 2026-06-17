@@ -15,6 +15,7 @@
         "laravel/socialite": "^5.28",
         "laravel/tinker": "^3.0",
         "payos/payos": "*",
+        "phpoffice/phpspreadsheet": "^5.0",
         "resend/resend-laravel": "^1.4",
         "simplesoftwareio/simple-qrcode": "^4.2",
         "spatie/laravel-permission": "^8.0",

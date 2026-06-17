@@ -1,9 +1,11 @@
 {
   "slots": {
-    "bride_name": { "type": "text",  "default_x": 50, "default_y": 38 },
-    "groom_name": { "type": "text",  "default_x": 50, "default_y": 48 },
-    "date":       { "type": "text",  "default_x": 50, "default_y": 60 },
-    "venue":      { "type": "text",  "default_x": 50, "default_y": 68 },
-    "photo":      { "type": "image", "default_x": 50, "default_y": 20 }
-  }
+    "bride_name": { "type": "text",  "label": "Tên cô dâu", "default_x": 50, "default_y": 38 },
+    "groom_name": { "type": "text",  "label": "Tên chú rể", "default_x": 50, "default_y": 48 },
+    "date":       { "type": "text",  "label": "Ngày cưới",  "default_x": 50, "default_y": 60 },
+    "venue":      { "type": "text",  "label": "Địa điểm",   "default_x": 50, "default_y": 68 },
+    "photo":      { "type": "image", "label": "Ảnh đôi",    "default_x": 50, "default_y": 20 }
+  },
+  "fonts": ["Playfair Display", "Cormorant Garamond", "Dancing Script", "Montserrat"],
+  "canvas": { "width": 390, "height": 844 }
 }
