@@ -59,6 +59,12 @@
         ">{{ $slot['value'] }}</div>
     @endforeach
 
+    @if ($event->wishes_enabled)
+        <div style="margin-top:3rem; padding:1.5rem; border-top:1px solid rgba(201,169,110,0.3);">
+            @include('partials.wishes-section', ['event' => $event, 'guest' => $guest])
+        </div>
+    @endif
+
 </div>
 @endsection
 

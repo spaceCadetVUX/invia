@@ -31,5 +31,12 @@ class AppServiceProvider extends ServiceProvider
                 Limit::perHour(200)->by('event:' . $request->route('slug')),
             ];
         });
+
+        RateLimiter::for('wishes', function (Request $request) {
+            return [
+                Limit::perMinutes(10, 5)->by($request->ip()),
+                Limit::perHour(500)->by('wishes-event:' . $request->route('slug')),
+            ];
+        });
     }
 }
