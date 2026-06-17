@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SendInvitationRequest;
 use App\Models\Event;
+use App\Services\PlanService;
 use App\Services\SendInvitationService;
 use Illuminate\Http\JsonResponse;
 use Inertia\Inertia;
@@ -12,7 +13,10 @@ use Inertia\Response;
 
 class SendInvitationController extends Controller
 {
-    public function __construct(private SendInvitationService $sendService) {}
+    public function __construct(
+        private SendInvitationService $sendService,
+        private PlanService           $planService,
+    ) {}
 
     public function index(Event $event): Response
     {
@@ -29,6 +33,7 @@ class SendInvitationController extends Controller
         $this->authorize('update', $event);
 
         abort_if($event->status !== 'published', 422, __('send.event_not_published'));
+        $this->planService->assertFeature($event, 'email');
 
         $count = $this->sendService->dispatch(
             event:    $event,

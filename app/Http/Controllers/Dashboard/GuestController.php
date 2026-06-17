@@ -10,6 +10,7 @@ use App\Http\Requests\UpdateGuestRequest;
 use App\Models\Event;
 use App\Models\Guest;
 use App\Services\GuestService;
+use App\Services\PlanService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -18,19 +19,23 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class GuestController extends Controller
 {
-    public function __construct(private GuestService $guestService) {}
+    public function __construct(
+        private GuestService $guestService,
+        private PlanService  $planService,
+    ) {}
 
     public function index(Event $event): Response
     {
         $this->authorize('update', $event);
 
         return Inertia::render('Dashboard/Events/Guests', [
-            'event'           => $event->only('id', 'slug', 'title'),
+            'event'           => $event->only('id', 'slug', 'title', 'plan'),
             'guests'          => Guest::where('event_id', $event->id)
                 ->with('rsvp:guest_id,status,plus_one')
                 ->orderBy('name')
                 ->paginate(50),
             'stats'           => $this->guestService->getStats($event),
+            'quota'           => $this->planService->getQuota($event),
             'selfRegisterUrl' => route('invitation.register.form', $event->slug),
         ]);
     }
@@ -38,6 +43,7 @@ class GuestController extends Controller
     public function store(StoreGuestRequest $request, Event $event): JsonResponse
     {
         $this->authorize('update', $event);
+        $this->planService->assertCanAddGuests($event);
 
         $guest = $this->guestService->addGuest($event, $request->validated());
 
@@ -67,6 +73,10 @@ class GuestController extends Controller
     public function import(ImportGuestRequest $request, Event $event): JsonResponse
     {
         $this->authorize('update', $event);
+
+        // Đếm số dòng hợp lệ trước khi import để check quota bulk
+        $rowCount = $this->guestService->countImportRows($request->file('file'));
+        $this->planService->assertCanAddGuests($event, max(1, $rowCount));
 
         $result = $this->guestService->importExcel($event, $request->file('file'));
 

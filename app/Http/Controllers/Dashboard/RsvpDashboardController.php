@@ -6,6 +6,7 @@ use App\Exports\RsvpExport;
 use App\Http\Controllers\Controller;
 use App\Models\Event;
 use App\Models\Rsvp;
+use App\Services\PlanService;
 use App\Services\RsvpDashboardService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -15,7 +16,10 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class RsvpDashboardController extends Controller
 {
-    public function __construct(private RsvpDashboardService $service) {}
+    public function __construct(
+        private RsvpDashboardService $service,
+        private PlanService          $planService,
+    ) {}
 
     public function index(Event $event, Request $request): Response
     {
@@ -34,6 +38,7 @@ class RsvpDashboardController extends Controller
     public function export(Event $event): StreamedResponse
     {
         $this->authorize('update', $event);
+        $this->planService->assertFeature($event, 'export');
 
         return (new RsvpExport($event))->download("rsvp-{$event->slug}.xlsx");
     }
@@ -42,6 +47,7 @@ class RsvpDashboardController extends Controller
     {
         $this->authorize('update', $event);
         abort_if($rsvp->event_id !== $event->id, 403);
+        $this->planService->assertFeature($event, 'table');
 
         $data = $request->validate([
             'table_no' => ['nullable', 'string', 'max:20'],

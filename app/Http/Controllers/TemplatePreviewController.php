@@ -29,14 +29,18 @@ class TemplatePreviewController extends Controller
             'template'      => $template,
         ];
 
-        abort_if(
-            !in_array($template->blade_file, Template::active()->pluck('blade_file')->toArray()),
-            404
-        );
-
-        return view('thiep.templates.' . $template->blade_file . '.index', [
+        return view('templates.' . $template->blade_file . '.index', [
             'event'     => $fakeEvent,
             'guest'     => null,
+            'music'     => ['type' => 'none'],
+            'ogMeta'    => [
+                'title'        => $fakeEvent->title,
+                'description'  => 'Preview thiệp',
+                'url'          => request()->url(),
+                'image'        => asset('img/og-default.jpg'),
+                'image_width'  => 1200,
+                'image_height' => 630,
+            ],
             'isPreview' => true,
         ]);
     }

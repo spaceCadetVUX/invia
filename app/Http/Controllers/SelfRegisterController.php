@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use App\Models\Guest;
+use App\Services\PlanService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
@@ -36,6 +37,8 @@ class SelfRegisterController extends Controller
             10,
             fn () => null,
         ) || abort(429);
+
+        app(PlanService::class)->assertCanAddGuests($event);
 
         Guest::create([
             'event_id' => $event->id,

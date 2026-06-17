@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\GoogleController;
+use App\Http\Middleware\EnsureEventNotExpired;
 use App\Http\Controllers\Dashboard\EventController;
 use App\Http\Controllers\Dashboard\EventEditorController;
 use App\Http\Controllers\Dashboard\GuestController;
@@ -8,6 +9,8 @@ use App\Http\Controllers\Dashboard\EventTemplateController;
 use App\Http\Controllers\Dashboard\DashboardWishController;
 use App\Http\Controllers\Dashboard\RsvpDashboardController;
 use App\Http\Controllers\Dashboard\BackupController;
+use App\Http\Controllers\Dashboard\PaymentController;
+use App\Http\Controllers\Dashboard\QuotaController;
 use App\Http\Controllers\Dashboard\SendInvitationController;
 use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\SelfRegisterController;
@@ -63,7 +66,7 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware(['auth', 'verified', 'role:host|admin'])
+Route::middleware(['auth', 'verified', 'role:host|admin', EnsureEventNotExpired::class])
     ->prefix('dashboard')
     ->name('dashboard.')
     ->group(function () {
@@ -101,7 +104,17 @@ Route::middleware(['auth', 'verified', 'role:host|admin'])
         Route::post('/events/{event:slug}/backup',               [BackupController::class, 'create'])->name('events.backup.create');
         Route::get( '/events/{event:slug}/backup/status',        [BackupController::class, 'status'])->name('events.backup.status');
         Route::get( '/events/{event:slug}/backup/{token}',       [BackupController::class, 'download'])->name('events.backup.download');
+
+        Route::get( '/events/{event:slug}/upgrade',                          [PaymentController::class, 'upgradePage'])->name('events.upgrade');
+        Route::post('/events/{event:slug}/payment',                          [PaymentController::class, 'create'])->name('events.payment.create');
+        Route::get( '/events/{event:slug}/payment/return',                   [PaymentController::class, 'returnHandler'])->name('events.payment.return');
+        Route::get( '/events/{event:slug}/payment/cancel',                   [PaymentController::class, 'cancelHandler'])->name('events.payment.cancel');
+        Route::post('/events/{event:slug}/payment/coupon-preview',           [PaymentController::class, 'couponPreview'])->name('events.payment.coupon-preview');
+        Route::get( '/events/{event:slug}/quota',                            [QuotaController::class, 'show'])->name('events.quota');
     });
+
+// PayOS webhook — ngoài dashboard group, không có auth/CSRF
+Route::post('/webhooks/payos', [PaymentController::class, 'webhook'])->name('webhooks.payos');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

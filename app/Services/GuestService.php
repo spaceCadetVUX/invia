@@ -28,6 +28,17 @@ class GuestService
         ]);
     }
 
+    public function countImportRows(UploadedFile $file): int
+    {
+        $spreadsheet = IOFactory::load($file->getPathname());
+        $rows        = $spreadsheet->getActiveSheet()->toArray();
+        // row 0 = heading — count non-empty data rows
+        return max(0, count(array_filter(
+            array_slice($rows, 1),
+            fn ($r) => !empty(array_filter($r))
+        )));
+    }
+
     public function importExcel(Event $event, UploadedFile $file): array
     {
         $import = new GuestsImport($event);
