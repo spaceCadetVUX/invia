@@ -2,7 +2,7 @@
 
 @section('og-tags')
     <meta property="og:title"       content="{{ $event->title }}" />
-    <meta property="og:description" content="{{ $event->date?->format('d/m/Y') }} • {{ $event->venue }}" />
+    <meta property="og:description" content="{{ $event->event_date?->format('d/m/Y') }} • {{ $event->venue_name }}" />
     <meta property="og:image"       content="{{ $event->og_image_path ? Storage::url($event->og_image_path) : asset('img/og-default.jpg') }}" />
     <meta property="og:url"         content="{{ url('/thiep/' . $event->slug) }}" />
     <meta property="og:type"        content="website" />

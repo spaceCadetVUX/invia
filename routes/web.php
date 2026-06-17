@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\Dashboard\EventController;
+use App\Http\Controllers\Dashboard\EventTemplateController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TemplatePreviewController;
 use App\Http\Controllers\ThiepController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -10,6 +12,9 @@ use Inertia\Inertia;
 
 // ─── Public: trang thiệp (Blade, server-side render) ─────────────────────────
 Route::get('/thiep/{slug}', [ThiepController::class, 'show'])->name('thiep.show');
+
+// ─── Template preview (public, sample data) ───────────────────────────────────
+Route::get('/template-preview/{template}', [TemplatePreviewController::class, 'show'])->name('template.preview');
 
 // ─── Google OAuth ─────────────────────────────────────────────────────────────
 Route::get('/auth/google',          [GoogleController::class, 'redirect'])->name('auth.google');
@@ -40,9 +45,11 @@ Route::middleware(['auth', 'verified', 'role:host|admin'])
     ->prefix('dashboard')
     ->name('dashboard.')
     ->group(function () {
-        Route::get('/events/create',      [EventController::class, 'create'])->name('events.create');
-        Route::post('/events',            [EventController::class, 'store'])->name('events.store');
-        Route::get('/events/{slug}',      [EventController::class, 'show'])->name('events.show');
+        Route::get('/events/create',                   [EventController::class, 'create'])->name('events.create');
+        Route::post('/events',                         [EventController::class, 'store'])->name('events.store');
+        Route::get('/events/{slug}',                   [EventController::class, 'show'])->name('events.show');
+        Route::get('/events/{event:slug}/template',    [EventTemplateController::class, 'edit'])->name('events.template.edit');
+        Route::patch('/events/{event:slug}/template',  [EventTemplateController::class, 'update'])->name('events.template.update');
     });
 
 Route::middleware('auth')->group(function () {

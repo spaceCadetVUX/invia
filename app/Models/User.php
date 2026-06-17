@@ -32,6 +32,11 @@ class User extends Authenticatable
         return $this->hasMany(Event::class);
     }
 
+    public function purchasedTemplates()
+    {
+        return $this->hasMany(UserTemplate::class);
+    }
+
     public function notifications()
     {
         return $this->hasMany(\App\Models\Notification::class);
