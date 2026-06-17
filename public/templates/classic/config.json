@@ -1,0 +1,9 @@
+{
+  "slots": {
+    "bride_name": { "type": "text",  "default_x": 50, "default_y": 38 },
+    "groom_name": { "type": "text",  "default_x": 50, "default_y": 48 },
+    "date":       { "type": "text",  "default_x": 50, "default_y": 60 },
+    "venue":      { "type": "text",  "default_x": 50, "default_y": 68 },
+    "photo":      { "type": "image", "default_x": 50, "default_y": 20 }
+  }
+}
