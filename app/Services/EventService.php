@@ -7,6 +7,7 @@ use App\Jobs\GenerateOgImage;
 use App\Models\Event;
 use App\Models\User;
 use App\Repositories\EventRepository;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 
 class EventService
@@ -38,6 +39,8 @@ class EventService
         ]);
 
         GenerateOgImage::dispatch($event);
+
+        Cache::forget("invitation:{$event->slug}");
 
         return $event;
     }

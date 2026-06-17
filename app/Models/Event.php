@@ -9,6 +9,7 @@ class Event extends Model
     protected $fillable = [
         'user_id', 'template_id', 'title', 'slug', 'event_type', 'status',
         'event_date', 'event_time', 'venue_name', 'venue_address', 'language',
+        'music_type', 'music_source', 'livestream_url',
         'settings', 'og_image_path', 'view_count',
         'rsvp_enabled', 'wishes_enabled', 'expires_at', 'published_at',
     ];

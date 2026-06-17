@@ -3,15 +3,18 @@
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\Dashboard\EventController;
 use App\Http\Controllers\Dashboard\EventTemplateController;
+use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TemplatePreviewController;
-use App\Http\Controllers\ThiepController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 // ─── Public: trang thiệp (Blade, server-side render) ─────────────────────────
-Route::get('/thiep/{slug}', [ThiepController::class, 'show'])->name('thiep.show');
+Route::get('/thiep/{slug}',              [InvitationController::class, 'show'])->name('invitation.show');
+Route::get('/thiep/{slug}/calendar.ics', [InvitationController::class, 'calendar'])->name('invitation.calendar');
+// Stub — implemented in F1.4
+Route::get('/thiep/{slug}/rsvp', fn($slug) => abort(404))->name('invitation.rsvp.form');
 
 // ─── Template preview (public, sample data) ───────────────────────────────────
 Route::get('/template-preview/{template}', [TemplatePreviewController::class, 'show'])->name('template.preview');
@@ -35,7 +38,7 @@ Route::get('/', function () {
         'canLogin'    => Route::has('login'),
         'canRegister' => Route::has('register'),
     ]);
-});
+})->name('home');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
