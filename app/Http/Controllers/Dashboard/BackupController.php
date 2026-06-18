@@ -7,6 +7,7 @@ use App\Jobs\GenerateBackupJob;
 use App\Models\Event;
 use App\Models\EventBackup;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -65,7 +66,7 @@ class BackupController extends Controller
         ]);
     }
 
-    public function download(Event $event, string $token): StreamedResponse
+    public function download(Event $event, string $token): RedirectResponse|StreamedResponse
     {
         $this->authorize('update', $event);
 
@@ -76,6 +77,13 @@ class BackupController extends Controller
 
         abort_if($backup->expires_at && $backup->expires_at->isPast(), 410, __('backup.link_expired'));
 
-        return Storage::download($backup->zip_path, "invia-backup-{$event->slug}.zip");
+        // R2 / S3: dùng signed URL (redirect, không stream qua server)
+        // local: fallback về stream vì local disk không hỗ trợ temporaryUrl
+        try {
+            $signedUrl = Storage::disk()->temporaryUrl($backup->zip_path, now()->addMinutes(5));
+            return redirect()->away($signedUrl);
+        } catch (\RuntimeException) {
+            return Storage::disk()->download($backup->zip_path, "invia-backup-{$event->slug}.zip");
+        }
     }
 }

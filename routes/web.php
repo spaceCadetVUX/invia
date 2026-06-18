@@ -1,5 +1,13 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminAnnouncementController;
+use App\Http\Controllers\Admin\AdminBlogController;
+use App\Http\Controllers\Admin\AdminCouponController;
+use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\AdminEventController;
+use App\Http\Controllers\Admin\AdminMusicController;
+use App\Http\Controllers\Admin\AdminTemplateController;
+use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Middleware\EnsureEventNotExpired;
 use App\Http\Controllers\Dashboard\EventController;
@@ -48,7 +56,15 @@ Route::get('/auth/google/callback', [GoogleController::class, 'callback'])->name
 // ─── Health check ─────────────────────────────────────────────────────────────
 Route::get('/health', function () {
     $checks = [];
+
     try { \DB::select('SELECT 1'); $checks['db'] = 'ok'; } catch (\Throwable) { $checks['db'] = 'error'; }
+
+    if (config('queue.default') === 'redis') {
+        try { \Illuminate\Support\Facades\Redis::ping(); $checks['redis'] = 'ok'; } catch (\Throwable) { $checks['redis'] = 'error'; }
+    }
+
+    try { \Illuminate\Support\Facades\Storage::disk()->exists('.health'); $checks['storage'] = 'ok'; } catch (\Throwable) { $checks['storage'] = 'error'; }
+
     $status = in_array('error', $checks) ? 503 : 200;
     return response()->json(['status' => $status === 200 ? 'ok' : 'degraded', 'checks' => $checks], $status);
 })->name('health');
@@ -111,6 +127,46 @@ Route::middleware(['auth', 'verified', 'role:host|admin', EnsureEventNotExpired:
         Route::get( '/events/{event:slug}/payment/cancel',                   [PaymentController::class, 'cancelHandler'])->name('events.payment.cancel');
         Route::post('/events/{event:slug}/payment/coupon-preview',           [PaymentController::class, 'couponPreview'])->name('events.payment.coupon-preview');
         Route::get( '/events/{event:slug}/quota',                            [QuotaController::class, 'show'])->name('events.quota');
+    });
+
+// ─── Admin Panel ─────────────────────────────────────────────────────────────
+Route::middleware(['auth', 'verified', 'role:admin'])
+    ->prefix('admin')->name('admin.')
+    ->group(function () {
+        Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
+
+        Route::get(   '/users',             [AdminUserController::class, 'index'])  ->name('users.index');
+        Route::patch( '/users/{user}/role', [AdminUserController::class, 'role'])   ->name('users.role');
+        Route::patch( '/users/{user}/ban',  [AdminUserController::class, 'ban'])    ->name('users.ban');
+        Route::patch( '/users/{user}/unban',[AdminUserController::class, 'unban'])  ->name('users.unban');
+        Route::delete('/users/{user}',      [AdminUserController::class, 'destroy'])->name('users.destroy');
+
+        Route::get(   '/templates',             [AdminTemplateController::class, 'index'])  ->name('templates.index');
+        Route::post(  '/templates',             [AdminTemplateController::class, 'store'])  ->name('templates.store');
+        Route::patch( '/templates/{template}',  [AdminTemplateController::class, 'update']) ->name('templates.update');
+        Route::delete('/templates/{template}',  [AdminTemplateController::class, 'destroy'])->name('templates.destroy');
+
+        Route::get(   '/music',         [AdminMusicController::class, 'index'])  ->name('music.index');
+        Route::post(  '/music',         [AdminMusicController::class, 'store'])  ->name('music.store');
+        Route::delete('/music/{track}', [AdminMusicController::class, 'destroy'])->name('music.destroy');
+
+        Route::get(   '/events',         [AdminEventController::class, 'index'])  ->name('events.index');
+        Route::delete('/events/{event}', [AdminEventController::class, 'destroy'])->name('events.destroy');
+
+        Route::get(   '/coupons',          [AdminCouponController::class, 'index'])  ->name('coupons.index');
+        Route::post(  '/coupons',          [AdminCouponController::class, 'store'])  ->name('coupons.store');
+        Route::patch( '/coupons/{coupon}', [AdminCouponController::class, 'update']) ->name('coupons.update');
+        Route::delete('/coupons/{coupon}', [AdminCouponController::class, 'destroy'])->name('coupons.destroy');
+
+        Route::get(   '/blog',       [AdminBlogController::class, 'index'])  ->name('blog.index');
+        Route::post(  '/blog',       [AdminBlogController::class, 'store'])  ->name('blog.store');
+        Route::patch( '/blog/{post}',[AdminBlogController::class, 'update']) ->name('blog.update');
+        Route::delete('/blog/{post}',[AdminBlogController::class, 'destroy'])->name('blog.destroy');
+
+        Route::get(   '/announcements',       [AdminAnnouncementController::class, 'index'])  ->name('announcements.index');
+        Route::post(  '/announcements',       [AdminAnnouncementController::class, 'store'])  ->name('announcements.store');
+        Route::patch( '/announcements/{ann}', [AdminAnnouncementController::class, 'update']) ->name('announcements.update');
+        Route::delete('/announcements/{ann}', [AdminAnnouncementController::class, 'destroy'])->name('announcements.destroy');
     });
 
 // PayOS webhook — ngoài dashboard group, không có auth/CSRF

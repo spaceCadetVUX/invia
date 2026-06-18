@@ -2,38 +2,35 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\SystemAnnouncement;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
 {
-    /**
-     * The root template that is loaded on the first page visit.
-     *
-     * @var string
-     */
     protected $rootView = 'app';
 
-    /**
-     * Determine the current asset version.
-     */
     public function version(Request $request): ?string
     {
         return parent::version($request);
     }
 
-    /**
-     * Define the props that are shared by default.
-     *
-     * @return array<string, mixed>
-     */
     public function share(Request $request): array
     {
         return [
             ...parent::share($request),
-            'auth' => [
+            'auth'         => [
                 'user' => $request->user(),
             ],
+            'announcement' => fn () => SystemAnnouncement::where('is_active', true)
+                ->where(fn ($q) =>
+                    $q->whereNull('starts_at')->orWhere('starts_at', '<=', now())
+                )
+                ->where(fn ($q) =>
+                    $q->whereNull('ends_at')->orWhere('ends_at', '>=', now())
+                )
+                ->latest()
+                ->first(['id', 'title', 'body', 'type']),
         ];
     }
 }

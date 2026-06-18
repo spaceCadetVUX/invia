@@ -1,6 +1,7 @@
 <script setup>
 import { Link, usePage } from '@inertiajs/vue3'
 import { computed } from 'vue'
+import AnnouncementBanner from '@/Components/AnnouncementBanner.vue'
 
 const page = usePage()
 const user = computed(() => page.props.auth?.user)
@@ -26,6 +27,9 @@ const flash = computed(() => page.props.flash)
                 </div>
             </div>
         </nav>
+
+        <!-- System announcement -->
+        <AnnouncementBanner />
 
         <!-- Flash messages -->
         <div v-if="flash?.success" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
