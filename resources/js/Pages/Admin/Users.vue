@@ -125,11 +125,12 @@ const avatarColor = (name) => {
 
                             <!-- Role select -->
                             <td class="px-6 py-4">
-                                <div class="relative inline-flex items-center">
+                                <div class="relative inline-flex items-center overflow-hidden rounded-lg">
                                     <select
                                         :value="user.roles?.[0]?.name ?? 'host'"
                                         @change="changeRole(user, $event.target.value)"
-                                        class="appearance-none text-xs font-medium rounded-lg pl-2.5 pr-6 py-1.5 border-0 cursor-pointer
+                                        style="-webkit-appearance:none;-moz-appearance:none;appearance:none"
+                                        class="text-xs font-medium pl-2.5 pr-6 py-1.5 border-0 cursor-pointer
                                                focus:outline-none focus:ring-2 focus:ring-[#5B9FD6]/30 transition"
                                         :class="(user.roles?.[0]?.name ?? 'host') === 'admin'
                                             ? 'bg-[#1E1E2D] text-white'

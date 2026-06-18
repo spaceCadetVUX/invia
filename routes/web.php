@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminAnnouncementController;
+use App\Http\Controllers\Admin\AdminAuthorController;
+use App\Http\Controllers\Admin\AdminUploadController;
 use App\Http\Controllers\Admin\AdminBlogController;
 use App\Http\Controllers\Admin\AdminCouponController;
 use App\Http\Controllers\Admin\AdminDashboardController;
@@ -8,6 +10,7 @@ use App\Http\Controllers\Admin\AdminEventController;
 use App\Http\Controllers\Admin\AdminMusicController;
 use App\Http\Controllers\Admin\AdminTemplateController;
 use App\Http\Controllers\Admin\AdminUserController;
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Middleware\EnsureEventNotExpired;
 use App\Http\Controllers\Dashboard\EventController;
@@ -45,6 +48,10 @@ Route::get( '/unsubscribe/{token}',       [UnsubscribeController::class, 'handle
 Route::get( '/thiep/{slug}/dang-ky',         [SelfRegisterController::class, 'form'])->name('invitation.register.form');
 Route::post('/thiep/{slug}/dang-ky',         [SelfRegisterController::class, 'store'])->name('invitation.register.store');
 Route::get( '/thiep/{slug}/dang-ky/success', [SelfRegisterController::class, 'success'])->name('invitation.register.success');
+
+// ─── Blog (public, Blade SSR) ─────────────────────────────────────────────────
+Route::get('/blog',         [BlogController::class, 'index'])->name('blog.index');
+Route::get('/blog/{slug}',  [BlogController::class, 'show'])->name('blog.show');
 
 // ─── Template preview (public, sample data) ───────────────────────────────────
 Route::get('/template-preview/{template}', [TemplatePreviewController::class, 'show'])->name('template.preview');
@@ -161,10 +168,19 @@ Route::middleware(['auth', 'verified', 'role:admin'])
         Route::patch( '/coupons/{coupon}', [AdminCouponController::class, 'update']) ->name('coupons.update');
         Route::delete('/coupons/{coupon}', [AdminCouponController::class, 'destroy'])->name('coupons.destroy');
 
-        Route::get(   '/blog',       [AdminBlogController::class, 'index'])  ->name('blog.index');
-        Route::post(  '/blog',       [AdminBlogController::class, 'store'])  ->name('blog.store');
-        Route::patch( '/blog/{post}',[AdminBlogController::class, 'update']) ->name('blog.update');
-        Route::delete('/blog/{post}',[AdminBlogController::class, 'destroy'])->name('blog.destroy');
+        Route::get(   '/blog',              [AdminBlogController::class, 'index'])  ->name('blog.index');
+        Route::get(   '/blog/create',       [AdminBlogController::class, 'create']) ->name('blog.create');
+        Route::post(  '/blog',              [AdminBlogController::class, 'store'])  ->name('blog.store');
+        Route::get(   '/blog/{post}/edit',  [AdminBlogController::class, 'edit'])   ->name('blog.edit');
+        Route::patch( '/blog/{post}',       [AdminBlogController::class, 'update']) ->name('blog.update');
+        Route::delete('/blog/{post}',       [AdminBlogController::class, 'destroy'])->name('blog.destroy');
+
+        Route::get(   '/authors',        [AdminAuthorController::class, 'index']) ->name('authors.index');
+        Route::post(  '/authors',        [AdminAuthorController::class, 'store']) ->name('authors.store');
+        Route::patch( '/authors/{user}', [AdminAuthorController::class, 'update'])->name('authors.update');
+        Route::delete('/authors/{user}', [AdminAuthorController::class, 'destroy'])->name('authors.destroy');
+
+        Route::post('/upload/image', [AdminUploadController::class, 'image'])->name('upload.image');
 
         Route::get(   '/announcements',       [AdminAnnouncementController::class, 'index'])  ->name('announcements.index');
         Route::post(  '/announcements',       [AdminAnnouncementController::class, 'store'])  ->name('announcements.store');

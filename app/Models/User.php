@@ -16,6 +16,8 @@ class User extends Authenticatable
         'name', 'email', 'password',
         'google_id', 'avatar_url', 'email_verified_at',
         'banned_at',
+        'bio', 'job_title', 'website',
+        'twitter_url', 'linkedin_url', 'facebook_url',
     ];
 
     protected $hidden = ['password', 'remember_token'];
@@ -42,5 +44,10 @@ class User extends Authenticatable
     public function notifications()
     {
         return $this->hasMany(\App\Models\Notification::class);
+    }
+
+    public function blogPosts()
+    {
+        return $this->hasMany(BlogPost::class, 'author_id');
     }
 }
