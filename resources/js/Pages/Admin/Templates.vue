@@ -59,6 +59,7 @@ function deactivate() {
         </div>
 
         <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
+            <div class="overflow-x-auto">
             <table class="w-full text-sm">
                 <thead>
                     <tr class="text-left text-gray-400 border-b bg-gray-50">
@@ -95,6 +96,7 @@ function deactivate() {
                     </tr>
                 </tbody>
             </table>
+            </div>
         </div>
 
         <!-- Form modal -->

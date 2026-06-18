@@ -2,8 +2,9 @@
 import { Link, usePage } from '@inertiajs/vue3'
 import { ref } from 'vue'
 
-const page     = usePage()
-const expanded = ref(false)
+const page       = usePage()
+const expanded   = ref(false)
+const mobileOpen = ref(false)
 
 const nav = [
     {
@@ -52,17 +53,33 @@ function isActive(path) {
     if (path === '/admin') return page.url === '/admin' || page.url === '/admin/'
     return page.url.startsWith(path)
 }
+
+const showLabel = (forMobile = false) => forMobile ? true : expanded.value
 </script>
 
 <template>
     <div class="flex min-h-screen bg-[#F5F6FA]">
+
+        <!-- Mobile backdrop -->
+        <Transition name="fade-backdrop">
+            <div
+                v-if="mobileOpen"
+                class="fixed inset-0 bg-black/40 z-20 lg:hidden"
+                @click="mobileOpen = false"
+            />
+        </Transition>
+
         <!-- Sidebar -->
         <aside
             class="fixed top-0 left-0 h-screen bg-[#1E1E2D] flex flex-col py-5 z-30 transition-all duration-300 ease-in-out overflow-hidden"
-            :class="expanded ? 'w-52' : 'w-[68px]'"
+            :class="[
+                mobileOpen ? 'translate-x-0 w-52' : '-translate-x-full lg:translate-x-0',
+                !mobileOpen ? (expanded ? 'lg:w-52' : 'lg:w-[68px]') : ''
+            ]"
         >
-            <!-- Logo + toggle -->
-            <div class="flex items-center px-3.5 mb-8" :class="expanded ? 'justify-between' : 'justify-center'">
+            <!-- Logo + desktop toggle -->
+            <div class="flex items-center px-3.5 mb-8"
+                 :class="(expanded || mobileOpen) ? 'justify-between' : 'justify-center'">
                 <div class="flex items-center gap-3 min-w-0">
                     <div class="w-9 h-9 bg-white/10 rounded-xl flex items-center justify-center shrink-0">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" class="w-5 h-5">
@@ -70,16 +87,27 @@ function isActive(path) {
                         </svg>
                     </div>
                     <Transition name="fade-label">
-                        <span v-if="expanded" class="text-white font-semibold text-sm tracking-wide whitespace-nowrap">Invia Admin</span>
+                        <span v-if="expanded || mobileOpen" class="text-white font-semibold text-sm tracking-wide whitespace-nowrap">Invia Admin</span>
                     </Transition>
                 </div>
+                <!-- Desktop collapse button -->
                 <button
-                    v-if="expanded"
+                    v-if="expanded && !mobileOpen"
                     @click="expanded = false"
-                    class="text-white/40 hover:text-white transition-colors ml-2 shrink-0"
+                    class="hidden lg:block text-white/40 hover:text-white transition-colors ml-2 shrink-0"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5"/>
+                    </svg>
+                </button>
+                <!-- Mobile close button -->
+                <button
+                    v-if="mobileOpen"
+                    @click="mobileOpen = false"
+                    class="lg:hidden text-white/40 hover:text-white transition-colors ml-2 shrink-0"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/>
                     </svg>
                 </button>
             </div>
@@ -90,12 +118,12 @@ function isActive(path) {
                     v-for="item in nav"
                     :key="item.path"
                     :href="item.path"
-                    :title="!expanded ? item.label : undefined"
+                    :title="(!expanded && !mobileOpen) ? item.label : undefined"
                     class="group relative flex items-center gap-3 h-10 rounded-xl px-2.5 transition-colors duration-150"
                     :class="isActive(item.path)
                         ? 'bg-white/15 text-white'
                         : 'text-white/40 hover:bg-white/8 hover:text-white/80'"
-                    @click="!expanded ? null : null"
+                    @click="mobileOpen = false"
                 >
                     <!-- Active line -->
                     <span v-if="isActive(item.path)" class="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-5 bg-white rounded-full" />
@@ -103,14 +131,14 @@ function isActive(path) {
                     <!-- Icon -->
                     <span class="shrink-0" v-html="item.icon" />
 
-                    <!-- Label (expanded) -->
+                    <!-- Label -->
                     <Transition name="fade-label">
-                        <span v-if="expanded" class="text-sm whitespace-nowrap overflow-hidden">{{ item.label }}</span>
+                        <span v-if="expanded || mobileOpen" class="text-sm whitespace-nowrap overflow-hidden">{{ item.label }}</span>
                     </Transition>
 
-                    <!-- Tooltip (collapsed only) -->
+                    <!-- Tooltip (desktop collapsed only) -->
                     <span
-                        v-if="!expanded"
+                        v-if="!expanded && !mobileOpen"
                         class="pointer-events-none absolute left-full ml-3 px-2.5 py-1 rounded-md bg-[#1E1E2D] text-white text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-150 shadow-lg border border-white/10"
                     >
                         {{ item.label }}
@@ -118,13 +146,13 @@ function isActive(path) {
                 </Link>
             </nav>
 
-            <!-- Bottom: expand toggle + avatar -->
+            <!-- Bottom: desktop expand toggle + avatar -->
             <div class="px-3 flex flex-col gap-3">
-                <!-- Expand button (collapsed state) -->
+                <!-- Expand button (desktop collapsed only) -->
                 <button
-                    v-if="!expanded"
+                    v-if="!expanded && !mobileOpen"
                     @click="expanded = true"
-                    class="w-full h-10 flex items-center justify-center text-white/40 hover:text-white hover:bg-white/8 rounded-xl transition-colors"
+                    class="hidden lg:flex w-full h-10 items-center justify-center text-white/40 hover:text-white hover:bg-white/8 rounded-xl transition-colors"
                     title="Mở rộng"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
@@ -141,7 +169,7 @@ function isActive(path) {
                         {{ $page.props.auth.user?.name?.charAt(0)?.toUpperCase() }}
                     </div>
                     <Transition name="fade-label">
-                        <div v-if="expanded" class="min-w-0">
+                        <div v-if="expanded || mobileOpen" class="min-w-0">
                             <p class="text-white text-xs font-medium truncate">{{ $page.props.auth.user?.name }}</p>
                             <p class="text-white/40 text-xs truncate">{{ $page.props.auth.user?.email }}</p>
                         </div>
@@ -150,12 +178,32 @@ function isActive(path) {
             </div>
         </aside>
 
-        <!-- Main content — offset theo sidebar width -->
+        <!-- Main content -->
         <div
-            class="flex-1 min-h-screen flex flex-col transition-all duration-300 ease-in-out"
-            :class="expanded ? 'ml-52' : 'ml-[68px]'"
+            class="flex-1 min-h-screen flex flex-col transition-all duration-300 ease-in-out ml-0"
+            :class="expanded ? 'lg:ml-52' : 'lg:ml-[68px]'"
         >
-            <main class="flex-1 p-8">
+            <!-- Mobile top bar -->
+            <div class="lg:hidden flex items-center gap-3 px-4 py-3 bg-white border-b border-gray-100 sticky top-0 z-10 shadow-sm">
+                <button
+                    @click="mobileOpen = true"
+                    class="p-2 rounded-lg text-gray-500 hover:bg-gray-100 transition-colors"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/>
+                    </svg>
+                </button>
+                <div class="flex items-center gap-2">
+                    <div class="w-6 h-6 bg-[#1E1E2D] rounded-lg flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" class="w-3.5 h-3.5">
+                            <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z"/>
+                        </svg>
+                    </div>
+                    <span class="text-sm font-semibold text-[#1E1E2D]">Invia Admin</span>
+                </div>
+            </div>
+
+            <main class="flex-1 p-4 lg:p-8">
                 <slot />
             </main>
         </div>
@@ -166,4 +214,8 @@ function isActive(path) {
 .fade-label-enter-active { transition: opacity 0.15s ease 0.1s, transform 0.15s ease 0.1s; }
 .fade-label-leave-active { transition: opacity 0.1s ease, transform 0.1s ease; }
 .fade-label-enter-from, .fade-label-leave-to { opacity: 0; transform: translateX(-6px); }
+
+.fade-backdrop-enter-active { transition: opacity 0.2s ease; }
+.fade-backdrop-leave-active { transition: opacity 0.15s ease; }
+.fade-backdrop-enter-from, .fade-backdrop-leave-to { opacity: 0; }
 </style>

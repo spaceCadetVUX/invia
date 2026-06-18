@@ -57,7 +57,7 @@ const avatarColor = (name) => {
     <AdminLayout>
         <!-- Header -->
         <div class="mb-8">
-            <div class="flex items-center justify-between">
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                     <h1 class="text-2xl font-bold text-[#1E1E2D] tracking-tight">Người dùng</h1>
                     <p class="text-sm text-gray-400 mt-1">
@@ -66,8 +66,8 @@ const avatarColor = (name) => {
                 </div>
 
                 <!-- Search -->
-                <form @submit.prevent="applySearch" class="flex items-center gap-2">
-                    <div class="relative">
+                <form @submit.prevent="applySearch" class="flex items-center gap-2 w-full sm:w-auto">
+                    <div class="relative flex-1 sm:flex-none">
                         <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"
                              xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
                              stroke="currentColor" stroke-width="2">
@@ -77,14 +77,14 @@ const avatarColor = (name) => {
                             v-model="search"
                             type="text"
                             placeholder="Tìm tên, email..."
-                            class="pl-9 pr-4 py-2 text-sm rounded-xl border border-gray-200 bg-white w-64
+                            class="pl-9 pr-4 py-2 text-sm rounded-xl border border-gray-200 bg-white w-full sm:w-64
                                    focus:outline-none focus:ring-2 focus:ring-[#5B9FD6]/30 focus:border-[#5B9FD6]
                                    transition placeholder-gray-400"
                         />
                     </div>
                     <button type="submit"
                         class="px-4 py-2 rounded-xl bg-[#1E1E2D] text-white text-sm font-medium
-                               hover:bg-[#2a2a3d] transition-colors">
+                               hover:bg-[#2a2a3d] transition-colors shrink-0">
                         Tìm
                     </button>
                 </form>
@@ -125,17 +125,25 @@ const avatarColor = (name) => {
 
                             <!-- Role select -->
                             <td class="px-6 py-4">
-                                <select
-                                    :value="user.roles?.[0]?.name ?? 'host'"
-                                    @change="changeRole(user, $event.target.value)"
-                                    class="text-xs font-medium rounded-lg px-2.5 py-1.5 border-0 cursor-pointer
-                                           focus:outline-none focus:ring-2 focus:ring-[#5B9FD6]/30 transition appearance-none"
-                                    :class="(user.roles?.[0]?.name ?? 'host') === 'admin'
-                                        ? 'bg-[#1E1E2D] text-white'
-                                        : 'bg-[#F0F4FF] text-[#5B9FD6]'">
-                                    <option value="host">host</option>
-                                    <option value="admin">admin</option>
-                                </select>
+                                <div class="relative inline-flex items-center">
+                                    <select
+                                        :value="user.roles?.[0]?.name ?? 'host'"
+                                        @change="changeRole(user, $event.target.value)"
+                                        class="appearance-none text-xs font-medium rounded-lg pl-2.5 pr-6 py-1.5 border-0 cursor-pointer
+                                               focus:outline-none focus:ring-2 focus:ring-[#5B9FD6]/30 transition"
+                                        :class="(user.roles?.[0]?.name ?? 'host') === 'admin'
+                                            ? 'bg-[#1E1E2D] text-white'
+                                            : 'bg-[#F0F4FF] text-[#5B9FD6]'">
+                                        <option value="host">host</option>
+                                        <option value="admin">admin</option>
+                                    </select>
+                                    <svg class="pointer-events-none absolute right-1.5 w-3 h-3 shrink-0"
+                                         :class="(user.roles?.[0]?.name ?? 'host') === 'admin' ? 'text-white/60' : 'text-[#5B9FD6]/60'"
+                                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                         stroke="currentColor" stroke-width="2.5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/>
+                                    </svg>
+                                </div>
                             </td>
 
                             <!-- Events count -->
