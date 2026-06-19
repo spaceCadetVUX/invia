@@ -112,10 +112,10 @@ function getItemOffset(si, ii) {
             <!-- ── Workspace selector ── -->
             <div class="px-3.5 mb-4">
                 <button
-                    class="w-full flex items-center gap-2.5 rounded-xl transition-all duration-[320ms]"
+                    class="w-full flex items-center gap-2.5 h-10 overflow-hidden rounded-xl transition-all duration-[320ms]"
                     :class="(expanded || mobileOpen)
-                        ? 'px-3 py-2 bg-gray-50 border border-gray-100 hover:bg-gray-100'
-                        : 'p-2 hover:bg-gray-50'"
+                        ? 'px-3 bg-gray-50 border border-gray-100 hover:bg-gray-100'
+                        : 'px-2 hover:bg-gray-50'"
                 >
                     <div class="w-6 h-6 rounded-lg bg-gradient-to-br from-[#0081A7] to-[#00AFB9]
                                 flex items-center justify-center text-white text-[10px] font-bold shrink-0">
@@ -152,7 +152,6 @@ function getItemOffset(si, ii) {
                             {{ section.label }}
                         </p>
                     </Transition>
-                    <div v-if="section.label && !(expanded || mobileOpen)" class="h-px bg-gray-100 mx-1 mb-2" />
 
                     <!-- Nav items -->
                     <div class="space-y-0.5">
