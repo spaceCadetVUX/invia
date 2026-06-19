@@ -119,7 +119,7 @@ const jsonLdText = computed(() => {
 </script>
 
 <template>
-    <div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6">
+    <div class="flex flex-col gap-6">
 
         <!-- ── Left: main content ─────────────────────────────────────────── -->
         <div class="space-y-5 min-w-0">
@@ -150,7 +150,7 @@ const jsonLdText = computed(() => {
         </div>
 
         <!-- ── Right: sidebar ─────────────────────────────────────────────── -->
-        <div class="space-y-4 lg:sticky lg:top-6 lg:self-start">
+        <div class="space-y-4">
 
             <!-- Sidebar tab bar -->
             <div class="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
@@ -182,13 +182,13 @@ const jsonLdText = computed(() => {
             <template v-if="sidebarTab === 'post'">
 
             <!-- Cover Image -->
-            <div class="bg-white border border-gray-100 rounded-2xl p-4 shadow-sm">
-                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Cover Image</p>
+            <div class="bg-violet-50 border border-violet-200 rounded-2xl p-4 shadow-sm">
+                <p class="text-xs font-semibold text-violet-500 uppercase tracking-wide mb-3">Cover Image</p>
 
                 <div class="relative group mb-3">
                     <template v-if="coverSrc">
                         <img :src="coverSrc"
-                             class="w-full aspect-video object-cover rounded-xl bg-gray-50"
+                             class="w-full h-32 object-cover rounded-xl bg-violet-100"
                              alt="Cover preview">
                         <button type="button"
                             @click="removeCover"
@@ -197,17 +197,17 @@ const jsonLdText = computed(() => {
                         </button>
                     </template>
                     <template v-else>
-                        <label class="flex flex-col items-center justify-center w-full aspect-video rounded-xl border-2 border-dashed border-gray-200 hover:border-[#5B9FD6] cursor-pointer transition-colors bg-gray-50">
-                            <svg class="w-8 h-8 text-gray-300 mb-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path stroke-linecap="round" stroke-linejoin="round" d="m21 15-5-5L5 21"/></svg>
-                            <span class="text-xs text-gray-400">Drag & drop or <span class="text-[#5B9FD6]">browse</span></span>
-                            <span class="text-xs text-gray-300 mt-0.5">JPG, PNG, WebP — 2MB</span>
+                        <label class="flex flex-col items-center justify-center w-full h-32 rounded-xl border-2 border-dashed border-violet-200 hover:border-violet-400 cursor-pointer transition-colors bg-violet-100/50">
+                            <svg class="w-8 h-8 text-violet-300 mb-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path stroke-linecap="round" stroke-linejoin="round" d="m21 15-5-5L5 21"/></svg>
+                            <span class="text-xs text-violet-400">Drag & drop or <span class="text-violet-600 font-medium">browse</span></span>
+                            <span class="text-xs text-violet-300 mt-0.5">JPG, PNG, WebP — 2MB</span>
                             <input type="file" accept="image/*" class="hidden" @change="onCoverChange">
                         </label>
                     </template>
                 </div>
 
                 <label v-if="coverSrc"
-                    class="flex items-center justify-center gap-2 w-full py-2 text-xs border border-gray-200 rounded-xl cursor-pointer hover:border-[#5B9FD6] hover:text-[#5B9FD6] transition-colors">
+                    class="flex items-center justify-center gap-2 w-full py-2 text-xs border border-violet-200 rounded-xl cursor-pointer hover:border-violet-400 hover:text-violet-600 text-violet-500 transition-colors">
                     <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5"/></svg>
                     Change image
                     <input type="file" accept="image/*" class="hidden" @change="onCoverChange">
@@ -215,24 +215,24 @@ const jsonLdText = computed(() => {
             </div>
 
             <!-- Status -->
-            <div class="bg-white border border-gray-100 rounded-2xl p-4 shadow-sm">
-                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Status</p>
+            <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 shadow-sm">
+                <p class="text-xs font-semibold text-emerald-600 uppercase tracking-wide mb-3">Status</p>
                 <label class="flex items-center gap-3 cursor-pointer select-none">
                     <div class="relative shrink-0">
                         <input v-model="form.is_published" type="checkbox" class="sr-only peer">
-                        <div class="w-10 h-6 bg-gray-200 rounded-full peer-checked:bg-[#1E1E2D] transition-colors"></div>
+                        <div class="w-10 h-6 bg-emerald-200 rounded-full peer-checked:bg-emerald-500 transition-colors"></div>
                         <div class="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform peer-checked:translate-x-4"></div>
                     </div>
-                    <span class="text-sm font-medium text-gray-700">Publish immediately</span>
+                    <span class="text-sm font-medium text-emerald-700">Publish immediately</span>
                 </label>
             </div>
 
             <!-- SEO -->
-            <div class="bg-white border border-gray-100 rounded-2xl p-4 shadow-sm space-y-4">
-                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide">SEO</p>
+            <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 shadow-sm space-y-4">
+                <p class="text-xs font-semibold text-amber-600 uppercase tracking-wide">SEO</p>
 
                 <!-- Google preview -->
-                <div class="rounded-xl border border-gray-100 p-3 bg-gray-50 text-xs">
+                <div class="rounded-xl border border-amber-100 p-3 bg-white text-xs">
                     <div class="text-[#006621] truncate mb-0.5">invia.vn › blog › {{ slug }}</div>
                     <div class="text-[#1a0dab] font-medium leading-snug line-clamp-1 mb-0.5">
                         {{ form.meta_title || form.title || 'Post title' }}
@@ -271,48 +271,48 @@ const jsonLdText = computed(() => {
             </div>
 
             <!-- JSON-LD preview -->
-            <div class="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
+            <div class="bg-slate-800 border border-slate-700 rounded-2xl shadow-sm overflow-hidden">
                 <button type="button"
                     @click="showJsonLd = !showJsonLd"
-                    class="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors">
+                    class="w-full flex items-center justify-between px-4 py-3 hover:bg-slate-700/50 transition-colors">
                     <div class="flex items-center gap-2">
-                        <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">JSON-LD</span>
-                        <span class="text-xs bg-[#EEF4FB] text-[#5B9FD6] px-1.5 py-0.5 rounded font-mono">ld+json</span>
+                        <span class="text-xs font-semibold text-slate-300 uppercase tracking-wide">JSON-LD</span>
+                        <span class="text-xs bg-slate-600 text-emerald-400 px-1.5 py-0.5 rounded font-mono">ld+json</span>
                     </div>
-                    <svg class="w-4 h-4 text-gray-400 transition-transform"
+                    <svg class="w-4 h-4 text-slate-400 transition-transform"
                          :class="showJsonLd ? 'rotate-180' : ''"
                          viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/>
                     </svg>
                 </button>
 
-                <div v-if="showJsonLd" class="border-t border-gray-100">
-                    <pre class="p-4 text-xs text-gray-600 bg-gray-50 overflow-x-auto leading-relaxed font-mono whitespace-pre-wrap break-words max-h-80">{{ jsonLdText }}</pre>
+                <div v-if="showJsonLd" class="border-t border-slate-700">
+                    <pre class="p-4 text-xs text-emerald-300 bg-slate-900 overflow-x-auto leading-relaxed font-mono whitespace-pre-wrap break-words max-h-80">{{ jsonLdText }}</pre>
                 </div>
             </div>
 
             <!-- FAQ -->
-            <div class="bg-white border border-gray-100 rounded-2xl p-4 shadow-sm">
+            <div class="bg-teal-50 border border-teal-200 rounded-2xl p-4 shadow-sm">
                 <div class="flex items-center justify-between mb-3">
                     <div>
-                        <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide">FAQ</p>
-                        <p class="text-xs text-gray-400 mt-0.5">Auto-generates FAQPage JSON-LD schema</p>
+                        <p class="text-xs font-semibold text-teal-600 uppercase tracking-wide">FAQ</p>
+                        <p class="text-xs text-teal-400 mt-0.5">Auto-generates FAQPage JSON-LD schema</p>
                     </div>
                     <button type="button" @click="addFaq"
-                        class="flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium rounded-lg border border-[#5B9FD6] text-[#5B9FD6] hover:bg-[#EEF4FB] transition-colors">
+                        class="flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium rounded-lg border border-teal-400 text-teal-600 hover:bg-teal-100 transition-colors">
                         <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14M5 12h14"/></svg>
                         Add
                     </button>
                 </div>
 
                 <div v-if="!form.faq?.length"
-                    class="border border-dashed border-gray-200 rounded-xl py-5 text-center text-xs text-gray-400">
+                    class="border border-dashed border-teal-200 rounded-xl py-5 text-center text-xs text-teal-400">
                     No FAQ items yet
                 </div>
 
                 <div class="space-y-3">
                     <div v-for="(item, i) in form.faq" :key="i"
-                        class="border border-gray-200 rounded-xl p-3 space-y-2 bg-gray-50/50">
+                        class="border border-teal-200 rounded-xl p-3 space-y-2 bg-white/70">
                         <div class="flex items-center justify-between">
                             <span class="text-xs font-medium text-gray-400">Question {{ i + 1 }}</span>
                             <button type="button" @click="removeFaq(i)"
@@ -336,11 +336,11 @@ const jsonLdText = computed(() => {
 
             <!-- ── TAB: Author ── -->
             <template v-if="sidebarTab === 'author'">
-            <div class="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
+            <div class="bg-purple-50 border border-purple-200 rounded-2xl shadow-sm overflow-hidden">
 
                 <!-- Header -->
-                <div class="flex items-center justify-between px-4 py-3 border-b border-gray-100">
-                    <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Authors</p>
+                <div class="flex items-center justify-between px-4 py-3 border-b border-purple-200">
+                    <p class="text-xs font-semibold text-purple-600 uppercase tracking-wide">Authors</p>
                     <button type="button"
                         @click="showCreateForm = !showCreateForm; authorError = ''"
                         class="flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium rounded-lg border transition-colors"
@@ -356,7 +356,7 @@ const jsonLdText = computed(() => {
                 </div>
 
                 <!-- Inline create form -->
-                <div v-if="showCreateForm" class="p-4 border-b border-gray-100 bg-gray-50/60 space-y-2.5">
+                <div v-if="showCreateForm" class="p-4 border-b border-purple-100 bg-purple-100/40 space-y-2.5">
                     <div>
                         <label class="block text-xs font-medium text-gray-600 mb-1">Name</label>
                         <input v-model="newAuthor.name"
