@@ -83,7 +83,7 @@ function getItemOffset(si, ii) {
 
             <!-- ── Logo ── -->
             <div class="flex items-center px-3.5 pt-5 pb-4"
-                 :class="(expanded || mobileOpen) ? 'justify-between' : 'justify-center'">
+                 :class="(expanded || mobileOpen) ? 'justify-between' : ''">
                 <div class="flex items-center gap-3 min-w-0">
                     <div class="w-8 h-8 rounded-xl shrink-0 flex items-center justify-center
                                 bg-gradient-to-br from-[#0081A7] to-[#00AFB9]
@@ -112,10 +112,10 @@ function getItemOffset(si, ii) {
             <!-- ── Workspace selector ── -->
             <div class="px-3.5 mb-4">
                 <button
-                    class="w-full flex items-center gap-2.5 rounded-xl transition-colors"
+                    class="w-full flex items-center gap-2.5 rounded-xl transition-all duration-[320ms]"
                     :class="(expanded || mobileOpen)
                         ? 'px-3 py-2 bg-gray-50 border border-gray-100 hover:bg-gray-100'
-                        : 'justify-center p-2 hover:bg-gray-50'"
+                        : 'p-2 hover:bg-gray-50'"
                 >
                     <div class="w-6 h-6 rounded-lg bg-gradient-to-br from-[#0081A7] to-[#00AFB9]
                                 flex items-center justify-center text-white text-[10px] font-bold shrink-0">
@@ -159,9 +159,8 @@ function getItemOffset(si, ii) {
                         <Link
                             v-for="(item, ii) in section.items" :key="item.path"
                             :href="item.path"
-                            class="group relative flex items-center gap-3 h-9 rounded-xl transition-all duration-200"
+                            class="group relative flex items-center gap-3 h-9 rounded-xl px-3 transition-all duration-200"
                             :class="[
-                                (expanded || mobileOpen) ? 'px-3' : 'justify-center',
                                 isActive(item.path)
                                     ? 'bg-gradient-to-r from-[#0081A7] to-[#00AFB9] text-white'
                                     : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50',
@@ -218,8 +217,7 @@ function getItemOffset(si, ii) {
                 <div class="h-px bg-gray-100" />
 
                 <!-- User -->
-                <div class="flex items-center gap-2.5"
-                     :class="(expanded || mobileOpen) ? '' : 'justify-center'">
+                <div class="flex items-center gap-2.5">
                     <div class="w-8 h-8 rounded-full bg-gradient-to-br from-[#F07167] to-[#FED9B7]
                                 ring-2 ring-white ring-offset-1 ring-offset-gray-50
                                 flex items-center justify-center text-white text-xs font-bold shrink-0 cursor-pointer"
@@ -299,10 +297,6 @@ function getItemOffset(si, ii) {
     transition: width 320ms cubic-bezier(0.65, 0, 0.35, 1),
                 transform 320ms cubic-bezier(0.65, 0, 0.35, 1);
 }
-.main-transition {
-    transition: margin-left 320ms cubic-bezier(0.65, 0, 0.35, 1);
-}
-
 /* Label fade — stagger delay via CSS custom property --stagger */
 .fade-label-enter-active {
     will-change: transform, opacity;
