@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreBlogPostRequest;
 use App\Models\BlogPost;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
@@ -13,12 +14,28 @@ use Inertia\Response;
 
 class AdminBlogController extends Controller
 {
-    public function index(): Response
+    public function index(Request $request): Response
     {
+        $search = trim($request->get('search', ''));
+        $status = $request->get('status'); // 'published' | 'draft'
+
+        $query = BlogPost::with('author:id,name')
+            ->when($status === 'published', fn ($q) => $q->where('is_published', true))
+            ->when($status === 'draft',     fn ($q) => $q->where('is_published', false));
+
+        if ($search) {
+            $vector = "to_tsvector('simple', unaccent(coalesce(title,'') || ' ' || coalesce(excerpt,'')))";
+            $tsq    = "websearch_to_tsquery('simple', unaccent(?))";
+
+            $query->whereRaw("{$vector} @@ {$tsq}", [$search])
+                  ->orderByRaw("ts_rank({$vector}, {$tsq}) DESC", [$search]);
+        } else {
+            $query->orderByDesc('created_at');
+        }
+
         return Inertia::render('Admin/Blog', [
-            'posts' => BlogPost::with('author:id,name')
-                ->orderByDesc('created_at')
-                ->paginate(20),
+            'posts'   => $query->paginate(20)->withQueryString(),
+            'filters' => ['search' => $search ?: null, 'status' => $status],
         ]);
     }
 

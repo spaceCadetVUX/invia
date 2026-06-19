@@ -1,14 +1,41 @@
 <script setup>
 import { Head, router, Link } from '@inertiajs/vue3'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import AdminLayout from '@/Layouts/AdminLayout.vue'
 import ConfirmDialog from '@/Components/ConfirmDialog.vue'
 
 const props = defineProps({
-    posts: { type: Object, required: true },
+    posts:   { type: Object, required: true },
+    filters: { type: Object, default: () => ({}) },
 })
 
 const deleteTarget = ref(null)
+const search = ref(props.filters.search ?? '')
+const status = ref(props.filters.status ?? '')
+
+const STATUS_TABS = [
+    { label: 'All',       val: '' },
+    { label: 'Published', val: 'published' },
+    { label: 'Draft',     val: 'draft' },
+]
+
+function navigate() {
+    router.get(route('admin.blog.index'), {
+        search: search.value || undefined,
+        status: status.value || undefined,
+    }, { preserveState: true, replace: true })
+}
+
+function setStatus(val) {
+    status.value = val
+    navigate()
+}
+
+let searchTimer = null
+watch(search, () => {
+    clearTimeout(searchTimer)
+    searchTimer = setTimeout(navigate, 350)
+})
 
 function deletePost() {
     router.delete(route('admin.blog.destroy', deleteTarget.value.id), {
@@ -32,6 +59,32 @@ const blogUrl = (slug) => `/blog/${slug}`
                 class="shrink-0 px-4 py-2 rounded-xl bg-[#1E1E2D] text-white text-sm font-medium hover:bg-[#2a2a3d] transition-colors text-center">
                 + New Post
             </Link>
+        </div>
+
+        <!-- Search + Status -->
+        <div class="mb-4 flex flex-col sm:flex-row sm:items-center gap-3">
+            <div class="relative w-full sm:max-w-xs">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none">
+                    <circle cx="11" cy="11" r="8"/><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.35-4.35"/>
+                </svg>
+                <input
+                    v-model="search"
+                    type="text"
+                    placeholder="Search title or excerpt…"
+                    class="w-full pl-9 pr-4 py-2 text-sm rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#5B9FD6]/30 focus:border-[#5B9FD6] transition-colors"
+                />
+            </div>
+            <div class="flex gap-1">
+                <button v-for="tab in STATUS_TABS" :key="tab.val"
+                    @click="setStatus(tab.val)"
+                    class="px-3 py-1.5 text-xs font-medium rounded-lg transition-colors"
+                    :class="status === tab.val
+                        ? 'bg-[#1E1E2D] text-white'
+                        : 'bg-white text-gray-500 border border-gray-200 hover:border-gray-300 hover:text-gray-700'">
+                    {{ tab.label }}
+                </button>
+            </div>
         </div>
 
         <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
@@ -100,7 +153,7 @@ const blogUrl = (slug) => `/blog/${slug}`
 
                         <tr v-if="!posts.data.length">
                             <td colspan="6" class="px-6 py-16 text-center text-gray-400">
-                                No posts yet.
+                                {{ search ? `No posts matching "${search}".` : 'No posts yet.' }}
                             </td>
                         </tr>
                     </tbody>
