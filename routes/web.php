@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\AdminBlogController;
 use App\Http\Controllers\Admin\AdminCouponController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminEventController;
+use App\Http\Controllers\Admin\AdminMusicCollectionController;
 use App\Http\Controllers\Admin\AdminMusicController;
 use App\Http\Controllers\Admin\AdminTemplateController;
 use App\Http\Controllers\Admin\AdminUserController;
@@ -162,6 +163,14 @@ Route::middleware(['auth', 'verified', 'role:admin'])
         Route::get(   '/music/{track}/cover',  [AdminMusicController::class, 'cover'])  ->name('music.cover');
         Route::patch( '/music/{track}',        [AdminMusicController::class, 'update']) ->name('music.update');
         Route::delete('/music/{track}',        [AdminMusicController::class, 'destroy'])->name('music.destroy');
+
+        Route::post(  '/music/collections',                                  [AdminMusicCollectionController::class, 'store'])      ->name('music.collections.store');
+        Route::get(   '/music/collections/{collection}/cover',               [AdminMusicCollectionController::class, 'cover'])      ->name('music.collections.cover');
+        Route::patch( '/music/collections/{collection}',                     [AdminMusicCollectionController::class, 'update'])     ->name('music.collections.update');
+        Route::delete('/music/collections/{collection}',                     [AdminMusicCollectionController::class, 'destroy'])    ->name('music.collections.destroy');
+        Route::post(  '/music/collections/{collection}/tracks',              [AdminMusicCollectionController::class, 'addTracks'])  ->name('music.collections.tracks.add');
+        Route::delete('/music/collections/{collection}/tracks/{track}',      [AdminMusicCollectionController::class, 'removeTrack'])->name('music.collections.tracks.remove');
+        Route::post(  '/music/collections/{collection}/reorder',             [AdminMusicCollectionController::class, 'reorder'])    ->name('music.collections.reorder');
 
         Route::get(   '/events',         [AdminEventController::class, 'index'])  ->name('events.index');
         Route::delete('/events/{event}', [AdminEventController::class, 'destroy'])->name('events.destroy');

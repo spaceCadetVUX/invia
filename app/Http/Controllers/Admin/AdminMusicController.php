@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreMusicRequest;
 use App\Http\Requests\UpdateMusicRequest;
+use App\Models\MusicCollection;
 use App\Models\MusicLibrary;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
@@ -17,7 +18,9 @@ class AdminMusicController extends Controller
     public function index(): Response
     {
         return Inertia::render('Admin/Music', [
-            'tracks' => MusicLibrary::where('is_active', true)
+            'tracks'      => MusicLibrary::where('is_active', true)->orderByDesc('created_at')->get(),
+            'collections' => MusicCollection::withCount('tracks')
+                ->with(['tracks' => fn($q) => $q->orderBy('music_collection_tracks.sort_order')])
                 ->orderByDesc('created_at')
                 ->get(),
         ]);

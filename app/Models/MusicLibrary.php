@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class MusicLibrary extends Model
 {
@@ -13,5 +14,10 @@ class MusicLibrary extends Model
     protected function casts(): array
     {
         return ['is_active' => 'boolean'];
+    }
+
+    public function collections(): BelongsToMany
+    {
+        return $this->belongsToMany(MusicCollection::class, 'music_collection_tracks', 'track_id', 'collection_id');
     }
 }
