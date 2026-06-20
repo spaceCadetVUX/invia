@@ -291,9 +291,11 @@ function getItemOffset(si, ii) {
                 </div>
             </div>
 
-            <main class="flex-1 p-4 lg:py-8 lg:px-6">
-                <slot />
-            </main>
+            <Transition name="page" mode="out-in">
+                <main class="flex-1 p-4 lg:py-8 lg:px-6" :key="page.url">
+                    <slot />
+                </main>
+            </Transition>
         </div>
 
     </div>
@@ -329,4 +331,20 @@ function getItemOffset(si, ii) {
 /* Hide scrollbar on nav */
 .scrollbar-none { scrollbar-width: none; }
 .scrollbar-none::-webkit-scrollbar { display: none; }
+
+/* Page transition */
+.page-enter-active {
+    transition: opacity 0.2s ease, transform 0.2s cubic-bezier(0.34, 1.3, 0.64, 1);
+}
+.page-leave-active {
+    transition: opacity 0.12s ease, transform 0.12s ease;
+}
+.page-enter-from {
+    opacity: 0;
+    transform: translateY(8px);
+}
+.page-leave-to {
+    opacity: 0;
+    transform: translateY(-4px);
+}
 </style>

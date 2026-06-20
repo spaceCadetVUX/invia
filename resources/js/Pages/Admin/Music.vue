@@ -372,8 +372,11 @@ function playCollection() {
             </button>
         </div>
 
-        <!-- ════════════ LIBRARY TAB ════════════ -->
-        <div v-if="activeTab === 'library'">
+        <!-- ════════════ TAB CONTENT ════════════ -->
+        <Transition name="tab" mode="out-in">
+
+        <!-- LIBRARY TAB -->
+        <div v-if="activeTab === 'library'" key="library">
 
             <!-- Hero -->
             <div class="lib-hero">
@@ -468,11 +471,12 @@ function playCollection() {
             </div>
         </div>
 
-        <!-- ════════════ COLLECTIONS TAB ════════════ -->
-        <div v-else>
+        <!-- COLLECTIONS TAB -->
+        <div v-else key="collections">
 
-            <!-- Collections grid -->
-            <div v-if="!activeCollection">
+            <!-- Collections grid / detail -->
+            <Transition name="col-panel" mode="out-in">
+            <div v-if="!activeCollection" key="grid">
                 <div class="col-page-hd">
                     <div>
                         <h2 class="col-page-title">Collections</h2>
@@ -521,7 +525,7 @@ function playCollection() {
             </div>
 
             <!-- Collection detail -->
-            <div v-else>
+            <div v-else key="detail">
                 <button class="col-back-btn" @click="closeCollection">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width:16px;height:16px"><path fill-rule="evenodd" d="M17 10a.75.75 0 0 1-.75.75H5.612l4.158 3.96a.75.75 0 1 1-1.04 1.08l-5.5-5.25a.75.75 0 0 1 0-1.08l5.5-5.25a.75.75 0 1 1 1.04 1.08L5.612 9.25H16.25A.75.75 0 0 1 17 10Z" clip-rule="evenodd" /></svg>
                     Collections
@@ -614,8 +618,10 @@ function playCollection() {
                     </div>
                 </div>
             </div>
+            </Transition>
         </div>
 
+        </Transition>
         <!-- Spacer for player bar -->
         <div v-if="currentTrack" class="sp-bar-spacer" aria-hidden="true" />
 
@@ -1178,5 +1184,36 @@ function playCollection() {
     .player-slide-enter-from, .player-slide-leave-to,
     .track-switch-enter-from, .track-switch-leave-to { transform: none; }
     .playing-bars i { animation: none; height: 8px; }
+}
+
+/* ── Tab switch animation ── */
+.tab-enter-active {
+    transition: opacity 0.22s ease, transform 0.22s cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+.tab-leave-active {
+    transition: opacity 0.14s ease, transform 0.14s ease;
+}
+.tab-enter-from {
+    opacity: 0;
+    transform: translateY(10px);
+}
+.tab-leave-to {
+    opacity: 0;
+    transform: translateY(-6px);
+}
+
+/* ── Collection grid ↔ detail animation ── */
+.col-panel-enter-active {
+    transition: opacity 0.2s ease, transform 0.2s cubic-bezier(0.34, 1.3, 0.64, 1);
+}
+.col-panel-leave-active {
+    transition: opacity 0.12s ease;
+}
+.col-panel-enter-from {
+    opacity: 0;
+    transform: translateX(16px);
+}
+.col-panel-leave-to {
+    opacity: 0;
 }
 </style>
