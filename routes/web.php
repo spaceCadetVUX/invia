@@ -156,9 +156,12 @@ Route::middleware(['auth', 'verified', 'role:admin'])
         Route::patch( '/templates/{template}',  [AdminTemplateController::class, 'update']) ->name('templates.update');
         Route::delete('/templates/{template}',  [AdminTemplateController::class, 'destroy'])->name('templates.destroy');
 
-        Route::get(   '/music',         [AdminMusicController::class, 'index'])  ->name('music.index');
-        Route::post(  '/music',         [AdminMusicController::class, 'store'])  ->name('music.store');
-        Route::delete('/music/{track}', [AdminMusicController::class, 'destroy'])->name('music.destroy');
+        Route::get(   '/music',                [AdminMusicController::class, 'index'])  ->name('music.index');
+        Route::post(  '/music',                [AdminMusicController::class, 'store'])  ->name('music.store');
+        Route::get(   '/music/{track}/stream', [AdminMusicController::class, 'stream']) ->name('music.stream');
+        Route::get(   '/music/{track}/cover',  [AdminMusicController::class, 'cover'])  ->name('music.cover');
+        Route::patch( '/music/{track}',        [AdminMusicController::class, 'update']) ->name('music.update');
+        Route::delete('/music/{track}',        [AdminMusicController::class, 'destroy'])->name('music.destroy');
 
         Route::get(   '/events',         [AdminEventController::class, 'index'])  ->name('events.index');
         Route::delete('/events/{event}', [AdminEventController::class, 'destroy'])->name('events.destroy');
